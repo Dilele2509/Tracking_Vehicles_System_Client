@@ -1,0 +1,289 @@
+.login-background {
+    height: 100%;
+    /* background-color: var(--primary-gray); */
+    background-image: url(../../../public//assets/Images/sub-background.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.authenticate-container {
+    position: relative;
+    background-color: var(--primary-white);
+    width: 60%;
+    height: 75%;
+    border-radius: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: stretch;
+    justify-items: stretch;
+}
+
+.box-element {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+}
+
+.form-area {
+    padding: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.form-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.form-content {
+    width: 100%;
+    height: 100%;
+}
+
+.checkbox-wrapper-46 {
+    margin-top: -0.6rem;
+    /* Keep this for spacing */
+    display: flex;
+    /* Use flexbox */
+    justify-content: right;
+    /* Aligns to the right */
+    align-items: center;
+    /* Center vertically */
+    width: 80%;
+    /* Ensure full width */
+}
+
+.checkbox-wrapper-46 input[type="checkbox"] {
+    display: none;
+    /* Hide default checkbox */
+    visibility: hidden;
+}
+
+.checkbox-wrapper-46 .cbx {
+    margin-left: 8px;
+    /* Add some space between checkbox and label */
+    cursor: pointer;
+    /* Pointer cursor for label */
+    display: flex;
+    /* Use flexbox to align inner elements */
+    align-items: center;
+    /* Center elements vertically */
+}
+
+.checkbox-wrapper-46 .cbx span {
+    display: inline-block;
+    vertical-align: middle;
+    color: #555;
+    font-size: 12px;
+    text-align: left;
+    transform: translate3d(0, 0, 0);
+}
+
+.checkbox-wrapper-46 .cbx span:first-child {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    transform: scale(1);
+    vertical-align: middle;
+    border: 1px solid #9098a9;
+    transition: all 0.2s ease;
+}
+
+.checkbox-wrapper-46 .cbx span:first-child svg {
+    position: absolute;
+    top: 3px;
+    left: 2px;
+    fill: none;
+    stroke: #333;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 16px;
+    stroke-dashoffset: 16px;
+    transition: all 0.3s ease;
+    transition-delay: 0.1s;
+    transform: translate3d(0, 0, 0);
+}
+
+.checkbox-wrapper-46 .cbx span:first-child:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background: var(--primary-yellow);
+    display: block;
+    transform: scale(0);
+    opacity: 1;
+    border-radius: 50%;
+}
+
+.checkbox-wrapper-46 .cbx span:last-child {
+    padding-left: 8px;
+}
+
+.checkbox-wrapper-46 .cbx:hover span:first-child {
+    border-color: var(--primary-yellow);
+}
+
+.checkbox-wrapper-46 .inp-cbx:checked+.cbx span:first-child {
+    background: var(--primary-yellow);
+    border-color: var(--primary-yellow);
+    animation: wave-46 0.4s ease;
+}
+
+.checkbox-wrapper-46 .inp-cbx:checked+.cbx span:first-child svg {
+    stroke-dashoffset: 0;
+}
+
+.checkbox-wrapper-46 .inp-cbx:checked+.cbx span:first-child:before {
+    transform: scale(3.5);
+    opacity: 0;
+    transition: all 0.6s ease;
+}
+
+@keyframes wave-46 {
+    50% {
+        transform: scale(0.9);
+    }
+}
+
+.form-btn {
+    min-width: 80%;
+    position: relative;
+    margin: 20px;
+    padding: 0.8em 1em;
+    outline: none;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border: none;
+    text-transform: uppercase;
+    background-color: #333;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 300;
+    font-size: 18px;
+    font-family: inherit;
+    z-index: 0;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.02, 0.01, 0.47, 1);
+}
+
+.form-btn:hover {
+    background-color: var(--primary-yellow);
+    color: #333;
+    font-weight: 500;
+    animation: sh0 0.5s ease-in-out both;
+}
+
+@keyframes sh0 {
+    0% {
+        transform: rotate(0deg) translate3d(0, 0, 0);
+    }
+
+    25% {
+        transform: rotate(7deg) translate3d(0, 0, 0);
+    }
+
+    50% {
+        transform: rotate(-7deg) translate3d(0, 0, 0);
+    }
+
+    75% {
+        transform: rotate(1deg) translate3d(0, 0, 0);
+    }
+
+    100% {
+        transform: rotate(0deg) translate3d(0, 0, 0);
+    }
+}
+
+.form-btn:hover span {
+    animation: storm 0.7s ease-in-out both;
+    animation-delay: 0.06s;
+}
+
+.form-btn::before,
+.form-btn::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #fff;
+    opacity: 0;
+    transition: transform 0.15s cubic-bezier(0.02, 0.01, 0.47, 1), opacity 0.15s cubic-bezier(0.02, 0.01, 0.47, 1);
+    z-index: -1;
+    transform: translate(100%, -25%) translate3d(0, 0, 0);
+}
+
+.form-btn:hover::before,
+.form-btn:hover::after {
+    opacity: 0.15;
+    transition: transform 0.2s cubic-bezier(0.02, 0.01, 0.47, 1), opacity 0.2s cubic-bezier(0.02, 0.01, 0.47, 1);
+}
+
+.form-btn:hover::before {
+    transform: translate3d(50%, 0, 0) scale(0.9);
+}
+
+.form-btn:hover::after {
+    transform: translate(50%, 0) scale(1.1);
+}
+
+.box-element p {
+    text-align: center;
+    width: 80%;
+    margin: 0 20px;
+    margin-top: -.5rem;
+    font-size: 12px;
+}
+
+.box-element p button {
+    margin-left: .2rem;
+    background-color: transparent;
+    color: var(--primary-yellow);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+
+
+.modal-sliding {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    z-index: 9999;
+    border-radius: .5rem;
+    background: url(../../../public/assets/Images/main-background.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: transform 0.8s ease;
+}
+
+.modal-slide-left {
+    transform: translateX(0%);
+}
+
+.modal-slide-right {
+    transform: translateX(100%);
+}
