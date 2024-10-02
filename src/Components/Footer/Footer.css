@@ -1,0 +1,143 @@
+.footer-container {
+    max-width: 100%;
+    padding: 48px 8px 0; /* Top padding 48px, left & right 8px, bottom 0 */
+    margin-top: 48px;
+    opacity: 1;
+    background: transparent;
+    color: var(--primary-gray);
+    border-radius: none;
+    box-shadow: none;
+}
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.footer-outline {
+    opacity: 1;
+    background: transparent;
+    color: var(--primary-gray);
+    border-radius: none;
+    box-shadow: none;
+    padding: 0 24px; /* Add padding to the outline to ensure spacing */
+}
+
+.footer-layout {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Space between items */
+    width: 100%; /* Ensure it takes the full width of footer-outline */
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.footer-logo {
+    padding: 24px; /* Add padding around the logo */
+    flex-basis: 30%;
+    max-width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the left */
+}
+
+.content-info {
+    display: flex;
+    flex: 1; /* Allow it to take the remaining space */
+}
+
+.footer-items {
+    display: flex;
+    flex-basis: 70%; 
+    max-width: 70%; 
+    padding-left: 24px; /* Padding for left alignment */
+}
+
+.footer-item {
+    padding: 12px 0; /* Top & bottom padding for items */
+    flex-basis: 33.333333%; 
+    max-width: 33.3333333%;
+    text-align: center;
+}
+
+.footer-item span {
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.footer-item p {
+    font-size: .9rem;
+    text-align: left;
+}
+
+.footer-item a {
+    color: var(--primary-yellow);
+}
+
+.logo-item img {
+    max-width: 90%; /* Ensure the logo fits well */
+    height: auto;
+}
+
+.logo-title {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.icon-social {
+    margin-right: .8rem;
+    font-size: 1.5rem;
+    color: var(--primary-gray);
+}
+
+.footer-sign {
+    padding: 24px; /* Consistent padding for the sign */
+    flex-basis: 100%;
+    max-width: 100%;
+    text-align: center; /* Center the text */
+}
+
+.footer-sign p{
+    font-size: 1rem;
+    margin-bottom: .5rem;
+}
+
+.footer-sign p a{
+    color: var(--primary-yellow);
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .footer-item{
+        flex-basis: 100%; /* Stack on smaller screens */
+        max-width: 100%;
+    }
+
+    .footer-logo{
+        flex-basis: 40%;
+        max-width: 40%;
+    }
+
+    .footer-items{
+        flex-basis: 60%;
+        max-width: 60%;
+        flex-direction: column;
+    }
+
+    .footer-item p,
+    .footer-sign p{
+        font-size: .8rem;
+    }
+
+    .footer-item{
+        text-align: left;
+    }
+}

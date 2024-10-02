@@ -1,0 +1,147 @@
+:root {
+    --header-height: 90px;
+    --negative-header-height: -90px;
+}
+
+.logo {
+    height: 2.5rem;
+    margin-right: 10px;
+}
+
+.navbar-container {
+    position: relative;
+    width: 100%;
+}
+
+.banner {
+    margin-top: var(--negative-header-height);
+    width: 100%;
+    height: 54rem;
+    background: url(../../../public/assets/Images/main-banner.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.banner-modal{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, .4);
+}
+
+.banner-content {
+    position: absolute;
+    top: 25%;
+    left: 5%;
+    width: 90%;
+}
+
+.banner-content h1 {
+    font-size: 5rem;
+    font-weight: 800;
+    letter-spacing: .15rem;
+    text-transform: uppercase;
+    color: var(--primary-white);
+}
+
+.banner-content h2 {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: .2rem;
+    text-transform: uppercase;
+    color: var(--primary-yellow);
+}
+
+.banner-content p {
+    margin-top: 2rem;
+    width: 28rem;
+    text-align: left;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--primary-yellow);
+}
+
+/* Responsive Design */
+
+/* For screens 1024px and up */
+@media (min-width: 1024px) {
+    .banner-content h1 {
+        font-size: 4rem;
+    }
+
+    .banner-content h2 {
+        font-size: 2.5rem;
+    }
+
+    .banner-content p {
+        width: 24rem;
+    }
+}
+
+/* For screens between 1023px and 768px */
+@media (max-width: 1023px) and (min-width: 768px) {
+    .banner{
+        height: 35rem;
+    }
+    
+    .banner-content {
+        top: 30%;
+        left: 5%;
+        width: 90%;
+    }
+
+    .banner-modal{
+        background-color: rgba(0, 0, 0, .6);
+    }
+
+    .banner-content h1 {
+        font-size: 3.5rem;
+    }
+
+    .banner-content h2 {
+        font-size: 2.5rem;
+    }
+
+    .banner-content p {
+        margin-top: 1.5rem;
+        width: 22rem;
+        font-size: 1.1rem;
+    }
+}
+
+/* For screens between 767px and 320px */
+@media (max-width: 767px) {
+    .banner{
+        height: 30rem;
+    }
+
+    .banner-content {
+        top: 30%;
+        left: 5%;
+        width: 90%;
+    }
+
+    .banner-modal{
+        background-color: rgba(0, 0, 0, .6);
+    }
+
+    .banner-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .banner-content h2 {
+        font-size: 1.8rem;
+    }
+
+    .banner-content p {
+        margin-top: 1rem;
+        width: 18rem;
+        font-size: 1rem;
+    }
+    .footer-sign p{
+        max-width: 90%;
+    }
+}

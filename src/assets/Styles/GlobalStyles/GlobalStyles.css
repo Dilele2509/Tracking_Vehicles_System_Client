@@ -12,7 +12,7 @@
     --primary-dark: #372D40;
     --primary-olive: #484A40;
     --primary-light-beige: #FEF6E9;
-    --primary-white: #FFFFFF;
+    --primary-white: #fffefd;
     --section-bg-height: 30rem;
     --section-bg-low-height: 20rem;
 }
@@ -22,13 +22,49 @@
     padding: 0;
     margin: 0;
 }
-.body-container{
+
+.body-container {
     width: 100%;
+    /* Optional: Add some default styles */
+    padding: 20px 0;
+    box-sizing: border-box;
+    /* Ensures padding is included in width */
 }
+
+/* For screens larger than 1024px */
+@media (min-width: 1024px) {
+    .body-container {
+        /* Adjust width for larger screens */
+        max-width: 1200px;
+        /* Optional: Set a maximum width */
+        margin: 0 auto;
+        /* Center the container */
+    }
+}
+
+/* For screens between 768px and 1023px */
+@media (max-width: 1023px) and (min-width: 768px) {
+    .body-container {
+        /* Adjust width for medium screens */
+        padding: 15px;
+        /* Optional: Adjust padding */
+    }
+}
+
+/* For screens smaller than 768px */
+@media (max-width: 767px) {
+    .body-container {
+        /* Full width for small screens */
+        padding: 10px;
+        /* Optional: Adjust padding */
+    }
+}
+
 .container {
     max-width: 1170px;
 }
-#root{
+
+#root {
     height: 100%;
 }
 
@@ -36,6 +72,7 @@ html {
     scroll-behavior: smooth;
     height: 100%;
 }
+
 body {
     position: relative;
     color: #fff;
@@ -117,7 +154,7 @@ h4 a,
 h5 a,
 h6 a {
     color: #fff;
-    text-decoration: none!important;
+    text-decoration: none !important;
     opacity: 1
 }
 
@@ -168,26 +205,26 @@ img {
     outline: 0;
 }
 
-.max-width-1280px{
+.max-width-1280px {
     /* max-width: 1280px; */
     max-width: 85%;
     margin: 0 auto;
 }
 
-.row{
+.row {
     display: flex;
     flex-wrap: wrap;
     /* margin-right: -15px;
     margin-left: -15px; */
 }
 
-.col-md-3{
+.col-md-3 {
     -ms-flex: 0 0 25%;
     flex: 0 0 25%;
     max-width: 25%;
 }
 
-.col-sm-6{
+.col-sm-6 {
     -ms-flex: 0 0 50%;
     flex: 0 0 50%;
     max-width: 50%;
@@ -199,7 +236,7 @@ img {
     max-width: 100%;
 }
 
-.grid-1-col{
+.grid-1-col {
     grid-column-gap: 16px;
     grid-row-gap: 16px;
     grid-template-rows: auto;
@@ -209,7 +246,7 @@ img {
     display: grid;
 }
 
-._3-col-grid{
+._3-col-grid {
     grid-column-gap: 50px;
     grid-row-gap: 50px;
     grid-template-rows: auto auto;
@@ -222,7 +259,8 @@ img {
     padding-left: 40px;
 }
 
-.col-md-3, .col-sm-6{
+.col-md-3,
+.col-sm-6 {
     position: relative;
     width: 100%;
     min-height: 1px;
@@ -230,13 +268,13 @@ img {
     padding-left: 15px;
 }
 
-.body-container{
+.body-container {
     position: relative;
 }
 
 .btn-custom {
     margin-top: 20px;
-    background-color: transparent !important;
+    background-color: rgba(0,0,0,0) !important;
     border: 2px solid #ddd;
     padding: 12px 40px;
     font-size: 16px;
@@ -255,7 +293,7 @@ img {
     font-weight: 500;
 }
 
-.blankPage{
+.blankPage {
     height: 100%;
 }
 
@@ -325,10 +363,12 @@ button {
 .img_responsive {
     max-width: 100%;
 }
-.transform-shift{
+
+.transform-shift {
     /* Set the initial state */
     transform: translate3d(0px, 0px, 0px);
-    transition: transform 0.5s; /* Add a smooth transition effect */
+    transition: transform 0.5s;
+    /* Add a smooth transition effect */
 }
 
 .transform-shift:hover {
@@ -336,8 +376,9 @@ button {
     transform: translate3d(0px, -20px, 0px);
 }
 
-.transform-sizeUp{
-    transition: transform 0.3s; /* Add a smooth transition effect */
+.transform-sizeUp {
+    transition: transform 0.3s;
+    /* Add a smooth transition effect */
 }
 
 .transform-sizeUp:hover {
@@ -345,21 +386,21 @@ button {
 }
 
 /* section */
-.section-area{
+.section-area {
     position: relative;
 }
 
-.section-background{
+.section-background {
     height: var(--section-bg-height);
 }
 
-.img-background{
+.img-background {
     width: 100%;
     height: var(--section-bg-height);
     object-fit: cover;
 }
 
-.section-content{
+.section-content {
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -373,18 +414,19 @@ button {
     background-color: rgba(0, 0, 0, .5);
 }
 
-.section-title{
+.section-title {
     text-transform: uppercase;
     font-size: 2.5rem;
     font-weight: 600;
 }
 
-.section-context{
+.section-context {
     font-size: 1.5rem;
 }
+
 /* end section */
 
-.back-home-page{
+.back-home-page {
     position: absolute;
     top: 0;
     left: 0;
@@ -407,41 +449,43 @@ button {
 }
 
 @keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 @keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
 }
 
 .toast {
-  animation: slideInLeft 500ms ease;
-  display: flex;
-  align-items: center;
-  max-width: 450px;
-  min-width: 300px;
-  background-color: #fff;
-  border-radius: 8px;
-  border-left: 4px solid;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
-  padding: 16px 0;
-  transition: all linear 0.3s;
+    animation: slideInLeft 500ms ease;
+    display: flex;
+    align-items: center;
+    max-width: 450px;
+    min-width: 300px;
+    background-color: #fff;
+    border-radius: 8px;
+    border-left: 4px solid;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
+    padding: 16px 0;
+    transition: all linear 0.3s;
 }
 
 .toast.play {
-  animation: fadeOut 1000ms linear forwards 1000ms;
+    animation: fadeOut 1000ms linear forwards 1000ms;
 }
 
 .toast--warning {
@@ -456,7 +500,7 @@ button {
     color: #49FF00;
 }
 
-.toast + .toast {
+.toast+.toast {
     margin-top: 24px;
 }
 
@@ -471,7 +515,7 @@ button {
 }
 
 .toast__body h3,
-.toast__body p{
+.toast__body p {
     color: #333;
 }
 
@@ -489,13 +533,13 @@ button {
     padding: 0 16px;
 }
 
-.toast__closeBtn{
+.toast__closeBtn {
     font-size: 20px;
     color: #000;
     opacity: .3;
     cursor: pointer;
 }
 
-.toast__closeBtn:hover{
+.toast__closeBtn:hover {
     opacity: .5;
 }

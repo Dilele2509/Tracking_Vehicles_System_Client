@@ -13,4 +13,8 @@ const ownerRoutes = [
     {path: '/', component: HomePage, layout: DefaultLayout}
 ]
 
-export {publicRoutes, ownerRoutes} 
+const driverRoutes = [
+    {path: '/', component: HomePage, layout: DefaultLayout}
+]
+
+export {publicRoutes, ownerRoutes, driverRoutes} 
