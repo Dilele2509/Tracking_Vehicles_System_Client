@@ -1,21 +1,18 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Card, Box, Typography, Button, Link as MuiLink, Link } from "@mui/material";
 import { GiClick } from "react-icons/gi";
+import { useNavigate } from "react-router-dom";
 
 function RotatingCard({ children }) {
   const [rotate, setRotate] = useState(false);
-  const [frontVisible, setFrontVisible] = useState(true);
 
   const rotate0 = () => {
     setRotate(false);
-    setFrontVisible(false); // Hiện mặt trước khi di chuột ra
   };
 
   const rotate180 = () => {
     setRotate(true);
-    setFrontVisible(true); // Ẩn mặt trước khi di chuột vào
   };
 
   return (
@@ -28,12 +25,12 @@ function RotatingCard({ children }) {
           transform: rotate ? "rotateY(180deg)" : "rotateY(0)",
           transformStyle: "preserve-3d",
           transition: "all 0.8s cubic-bezier(0.34, 1.45, 0.7, 1)",
-          width: "100%", // Chiều rộng là 100%
-          height: "100%", // Chiều cao là 100%
+          width: "100%", 
+          height: "100%", 
         }}
       >
         {React.Children.map(children, (child) => {
-          return React.cloneElement(child, { frontVisible });
+          return React.cloneElement(child, { rotate });
         })}
       </Card>
     </Box>
@@ -54,7 +51,7 @@ function RotatingCardFront({ image, title, description }) {
       alignItems="center"
       borderRadius="1rem"
       width="100%"
-      height='100%' // Chiều cao là 100%
+      height='100%' 
       position="relative"
       zIndex={2}
       sx={{
@@ -76,7 +73,8 @@ function RotatingCardFront({ image, title, description }) {
   );
 }
 
-function RotatingCardBack({ image, title, description, action, frontVisible }) {
+function RotatingCardBack({ image, title, description, action, rotate }) {
+  const navigate = useNavigate()
   return (
     <Box
       display="flex"
@@ -84,15 +82,15 @@ function RotatingCardBack({ image, title, description, action, frontVisible }) {
       alignItems="center"
       borderRadius="1rem"
       width="100%"
-      height="100%" // Chiều cao là 100%
+      height="100%"
       position="absolute"
       top={0}
       left={0}
-      zIndex={5}
+      zIndex={5} 
       sx={{
         backgroundImage: `linear-gradient(rgba(51, 51, 51, 0.85), rgba(51, 51, 51, 0.85)), url(${image})`,
         backgroundSize: "cover",
-        backfaceVisibility: frontVisible ? "visible" : "hidden",
+        backfaceVisibility: rotate ? "visible" : "hidden",
         transform: "rotateY(180deg)",
         opacity: 1,
       }}
@@ -108,7 +106,9 @@ function RotatingCardBack({ image, title, description, action, frontVisible }) {
           <Box width="50%" mt={4} mb={2} mx="auto">
             <Button
               component={action.type === "external" ? MuiLink : Link}
-              to={action.route}
+              onClick={()=>{
+                navigate(action.route)
+              }}
               sx={{ 
                 backgroundColor: action.btn_background_color,
                 color: action.btn_color,

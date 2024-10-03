@@ -3,12 +3,6 @@ import PropTypes from 'prop-types';
 import './InputBox.css';
 
 const InputBox = ({ label, type, fullWidth, error, disabled, ...rest }) => {
-  // Determine which custom class to apply based on the state
-  const inputClassName = `
-    input-box 
-    ${error ? 'input-box-error' : ''} 
-    ${disabled ? 'input-box-disabled' : ''}
-  `;
 
   return (
     <div className="input-container">

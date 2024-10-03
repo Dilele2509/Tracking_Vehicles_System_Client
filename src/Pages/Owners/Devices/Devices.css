@@ -1,0 +1,212 @@
+.device-container {
+    margin-top: -5rem;
+    padding: 2rem;
+    border-radius: 1rem;
+    background-color: var(--primary-white);
+}
+
+.device-title{
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.static-content {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.static-element {
+    text-align: center;
+}
+
+.static-element h1 {
+    font-size: 3.5rem;
+    font-weight: 500;
+    color: var(--primary-yellow);
+}
+
+.static-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--primary-gray);
+}
+
+.device-price{
+    font-weight: 600;
+    font-size: 2em !important;
+    color: var(--red);
+}
+
+.device-content {
+    margin-top: 4rem;
+    width: 100%;
+    display: flex;
+    height: fit-content;
+}
+
+.device-img{
+    flex-basis: 40%;
+    max-width: 40%;
+    position: relative;
+    margin: 20px;
+}
+
+.device-img img{
+    height: 35rem ;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 1rem;
+}
+
+.content-device {
+    margin: 20px;
+    flex-basis: 60%;
+    max-width: 60%;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-box {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.content-item {
+    flex-basis: 50%;
+    max-width: 45%;
+    padding: 0 1rem;
+}
+
+.content-item h1 {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: .5rem;
+}
+
+.content-item p {
+    font-size: .9rem;
+}
+
+.icon-device {
+    font-size: 2rem;
+    color: var(--primary-yellow);
+}
+
+.in-stock{
+    display: flex;
+    align-items: center;
+}
+
+.in-stock h3{
+    font-weight: 500;
+    margin-right: 1rem;
+}
+
+.in-stock p{
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.red{
+    color: var(--red);
+}
+
+.func-choosing {
+    padding: 30px 0;
+    display: flex;
+}
+
+.buy-btn {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    background: #1c1c1c;
+    font-family: "Montserrat", sans-serif;
+    box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    border: none;
+}
+
+.buy-btn:after {
+    content: " ";
+    width: 0%;
+    height: 100%;
+    background: #FFD401;
+    position: absolute;
+    transition: all 0.4s ease-in-out;
+    right: 0;
+}
+
+.buy-btn:hover::after {
+    right: auto;
+    left: 0;
+    width: 100%;
+}
+
+.buy-btn span {
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+    padding: 18px 25px;
+    color: #fff;
+    font-size: 1.125em;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    z-index: 20;
+    transition: all 0.3s ease-in-out;
+}
+
+.buy-btn:hover span {
+    color: #1c1c1c;
+    animation: scaleUp 0.3s ease-in-out;
+}
+
+@keyframes scaleUp {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(0.95);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.quant-num-cart input,
+.quant-num-cart button {
+    border: 0;
+    border-left: 1px solid #eee;
+    outline: none;
+    height: 50px;
+    text-align: center;
+    width: 50px;
+    float: left;
+    margin-right: 5px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    background: #fff;
+    color: #909090;
+    font-size: 18px;
+}
+
+.quant-num-cart button {
+    font-size: 24px;
+}
+
+.quant-num-cart button:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #eee;
+    border-color: transparent;
+    cursor: pointer;
+}

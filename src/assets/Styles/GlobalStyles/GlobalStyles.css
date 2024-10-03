@@ -13,6 +13,10 @@
     --primary-olive: #484A40;
     --primary-light-beige: #FEF6E9;
     --primary-white: #fffefd;
+    --orange: #FF8F00;
+    --blue: #0079FF;
+    --green: #06D001;
+    --red: #FC2947;
     --section-bg-height: 30rem;
     --section-bg-low-height: 20rem;
 }
@@ -219,9 +223,9 @@ img {
 }
 
 .col-md-3 {
-    -ms-flex: 0 0 25%;
-    flex: 0 0 25%;
-    max-width: 25%;
+    -ms-flex: 0 0 33.33333%;
+    flex: 0 0 33.33333%;
+    max-width: 33.33333%;
 }
 
 .col-sm-6 {
@@ -251,6 +255,15 @@ img {
     grid-row-gap: 50px;
     grid-template-rows: auto auto;
     grid-template-columns: 1fr 1fr 1fr;
+    grid-auto-columns: 1fr;
+    display: grid;
+}
+
+._2-col-grid {
+    grid-column-gap: 50px;
+    grid-row-gap: 50px;
+    grid-template-rows: auto auto;
+    grid-template-columns: 1fr 1fr;
     grid-auto-columns: 1fr;
     display: grid;
 }

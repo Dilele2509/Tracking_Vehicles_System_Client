@@ -40,7 +40,7 @@ export default function HomePage() {
               image={chikawa}
               title="kakaka"
               description="hihihihi"
-              action={{ type: "internal", route: "/", btn_background_color: "#E9BD20", btn_color: "#333", label: "Start with header" }}
+              action={{ type: "internal", route: "/vehicles", btn_background_color: "#E9BD20", btn_color: "#333", label: "Show vehicle list" }}
             />
           </RotatingCard>
         </div>

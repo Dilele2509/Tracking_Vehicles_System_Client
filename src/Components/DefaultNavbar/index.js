@@ -6,20 +6,43 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu'; 
+import MenuIcon from '@mui/icons-material/Menu';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { useScrollTrigger, Slide, CssBaseline } from '@mui/material';
+import { useScrollTrigger, Slide } from '@mui/material';
 import Fab from '@mui/material/Fab';
 import Fade from '@mui/material/Fade';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Container from '@mui/material/Container';
 import './DefaultNavbar.css';
+import { Link, useLocation } from 'react-router-dom';
 
 const logo_dark = '/assets/Logo/logo-dark.png';
-const pages = ['Vehicle List', 'Device', 'Blog', 'Contact us'];
+const pages = [
+    {
+        id: 1,
+        page_name: 'Vehicles List',
+        route: '/vehicles'
+    },
+    {
+        id: 2,
+        page_name: 'Device Shop',
+        route: '/devices'
+    },
+    {
+        id: 3,
+        page_name: 'Blog',
+        route: '/blog'
+    },
+    {
+        id: 4,
+        page_name: 'Contact Us',
+        route: '/contact'
+    }
+
+];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ScrollTop(props) {
@@ -76,6 +99,7 @@ HideOnScroll.propTypes = {
 };
 
 function DefaultNavbar(props) {
+    const location = useLocation();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -95,60 +119,31 @@ function DefaultNavbar(props) {
         setAnchorElUser(null);
     };
 
+    const { haveContent, image } = props
+
     return (
         <div className="navbar-container">
             <HideOnScroll {...props}>
-                <AppBar
-                    position="sticky"
-                    sx={{
-                        backgroundColor: '#E9BD20',
-                        top: '1rem',
-                        width: { xs: '100%', md: '90%' }, // Adjust width for mobile
-                        zIndex: 999999,
-                        marginLeft: 'auto',
-                        marginRight: 'auto',
-                        borderRadius: { xs: '0', md: '.8rem' }, // No border radius on mobile
-                    }}
-                >
+                <AppBar position="sticky" sx={{ backgroundColor: '#E9BD20', top: '1rem', width: { xs: '100%', md: '90%' }, zIndex: 999999, marginLeft: 'auto', marginRight: 'auto', borderRadius: { xs: '0', md: '.8rem' } }}>
                     <Container maxWidth="xl">
                         <Toolbar disableGutters>
-                            <a href="/">
+                            <Link to="/">
                                 <img src={logo_dark} alt="logo" className="logo" />
-                            </a>
+                            </Link>
 
                             {/* Mobile Menu */}
                             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                                <IconButton
-                                    size="large"
-                                    aria-label="account of current user"
-                                    aria-controls="menu-appbar"
-                                    aria-haspopup="true"
-                                    onClick={handleOpenNavMenu}
-                                    color="inherit"
-                                >
-                                    <MenuIcon sx={{ color: '#3B3B3B' }} /> {/* Add MenuIcon here */}
+                                <IconButton size="large" aria-label="account of current user" aria-controls="menu-appbar" aria-haspopup="true" onClick={handleOpenNavMenu} color="inherit">
+                                    <MenuIcon sx={{ color: '#3B3B3B' }} />
                                 </IconButton>
-                                <Menu
-                                    id="menu-appbar"
-                                    anchorEl={anchorElNav}
-                                    anchorOrigin={{
-                                        vertical: 'bottom',
-                                        horizontal: 'left',
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'left',
-                                    }}
-                                    open={Boolean(anchorElNav)}
-                                    onClose={handleCloseNavMenu}
-                                    sx={{ display: { xs: 'block', md: 'none' } }}
-                                >
+                                <Menu id="menu-appbar" anchorEl={anchorElNav} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} keepMounted transformOrigin={{ vertical: 'top', horizontal: 'left' }} open={Boolean(anchorElNav)} onClose={handleCloseNavMenu} sx={{ display: { xs: 'block', md: 'none' } }}>
                                     {pages.map((page) => (
-                                        <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                            <Typography sx={{ textAlign: 'center', color: '#3B3B3B' }}>
-                                                {page}
-                                            </Typography>
+                                        <MenuItem key={page.id} onClick={handleCloseNavMenu}>
+                                            <Link to={page.route}>
+                                                <Typography sx={{ textAlign: 'center', color: '#3B3B3B' }}>
+                                                    {page.page_name}
+                                                </Typography>
+                                            </Link>
                                         </MenuItem>
                                     ))}
                                 </Menu>
@@ -157,13 +152,15 @@ function DefaultNavbar(props) {
                             {/* Desktop Menu */}
                             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                                 {pages.map((page) => (
-                                    <Button
-                                        key={page}
-                                        onClick={handleCloseNavMenu}
-                                        sx={{ my: 2, color: '#3B3B3B', display: 'block' }}
-                                    >
-                                        {page}
-                                    </Button>
+                                    <Link to={page.route} key={page.id}>
+                                        <Button
+                                            className={`btn-navbar ${location.pathname === page.route ? 'active' : ''}`}
+                                            onClick={handleCloseNavMenu}
+                                            sx={{ my: 2, color: '#3B3B3B', display: 'block' }}
+                                        >
+                                            {page.page_name}
+                                        </Button>
+                                    </Link>
                                 ))}
                             </Box>
 
@@ -171,25 +168,10 @@ function DefaultNavbar(props) {
                             <Box sx={{ flexGrow: 0 }}>
                                 <Tooltip title="Open settings">
                                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                        <Avatar alt="Remy Sharp" src="/assets/Images/main-background.png" />
+                                        <Avatar alt="Remy Sharp" src="/assets/Images/chikawa.png" />
                                     </IconButton>
                                 </Tooltip>
-                                <Menu
-                                    sx={{ mt: '45px' }}
-                                    id="menu-appbar"
-                                    anchorEl={anchorElUser}
-                                    anchorOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    open={Boolean(anchorElUser)}
-                                    onClose={handleCloseUserMenu}
-                                >
+                                <Menu sx={{ mt: '45px' }} id="menu-appbar" anchorEl={anchorElUser} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} keepMounted transformOrigin={{ vertical: 'top', horizontal: 'right' }} open={Boolean(anchorElUser)} onClose={handleCloseUserMenu}>
                                     {settings.map((setting) => (
                                         <MenuItem key={setting} onClick={handleCloseUserMenu}>
                                             <Typography>{setting}</Typography>
@@ -205,14 +187,23 @@ function DefaultNavbar(props) {
             {/* Anchor for scrolling */}
             <div id="back-to-top-anchor" />
 
-            <div className='banner'>
-                <div className='banner-modal'></div>
+            <div
+                className="banner"
+                style={{
+                    backgroundImage: `url(${process.env.PUBLIC_URL}/assets/Images/${image})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat'
+                }}
+            >
             </div>
-            <div className='banner-content'>
+
+
+            {haveContent ? <div className='banner-content'>
                 <h2>Vehicle Tracking</h2>
                 <h1>System</h1>
                 <p>The system developed by HaLee Company helps users track their personal vehicles during rental, borrowing, as well as tracking location and other modern services.</p>
-            </div>
+            </div> : null}
 
             <ScrollTop {...props}>
                 <Fab size="small" aria-label="scroll back to top">
