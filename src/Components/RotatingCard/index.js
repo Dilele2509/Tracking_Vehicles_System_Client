@@ -61,7 +61,7 @@ function RotatingCardFront({ image, title, description }) {
       }}
     >
       <Box py={12} px={3} textAlign="center" lineHeight={1}>
-        <GiClick fontSize='2.5rem' color="#fff" />
+        <GiClick style={{width: '100%', textAlign: 'center'}} fontSize='2.5rem' color="#fff" />
         <Typography variant="h3" color="white" gutterBottom>
           {title}
         </Typography>

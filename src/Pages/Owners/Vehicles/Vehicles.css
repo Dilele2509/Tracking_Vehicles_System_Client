@@ -1,8 +1,8 @@
 .vehicle-menu-container {
-    background-color: transparent;
-    margin-top: 0;
-    padding-top: 5rem;
-    padding-bottom: 8rem;
+    margin-top: -5rem;
+    padding: 2rem;
+    border-radius: 1rem;
+    background-color: var(--primary-white);
 }
 
 .main-contain-menu {
@@ -23,8 +23,8 @@
     font-weight: 700;
     font-size: 3rem;
     text-align: center;
-    margin-top: -2rem;
-    margin-bottom: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 2.5rem;
 }
 
 .menu-vehicles {
@@ -47,6 +47,7 @@
     height: 18rem;
     cursor: pointer;
     background-color: var(--primary-white);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     flex-direction: row;
     text-decoration: none;

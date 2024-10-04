@@ -43,7 +43,23 @@ const pages = [
     }
 
 ];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = [
+    {
+        id: 1,
+        page_name: 'Profile',
+        route: '/profile'
+    },
+    {
+        id: 2,
+        page_name: 'Account',
+        route: '/account'
+    },
+    {
+        id: 3,
+        page_name: 'Logout',
+        route: '/'
+    }
+];
 
 function ScrollTop(props) {
     const { children, window } = props;
@@ -136,7 +152,7 @@ function DefaultNavbar(props) {
                                 <IconButton size="large" aria-label="account of current user" aria-controls="menu-appbar" aria-haspopup="true" onClick={handleOpenNavMenu} color="inherit">
                                     <MenuIcon sx={{ color: '#3B3B3B' }} />
                                 </IconButton>
-                                <Menu id="menu-appbar" anchorEl={anchorElNav} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} keepMounted transformOrigin={{ vertical: 'top', horizontal: 'left' }} open={Boolean(anchorElNav)} onClose={handleCloseNavMenu} sx={{ display: { xs: 'block', md: 'none' } }}>
+                                <Menu id="menu-appbar" anchorEl={anchorElNav} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} keepMounted transformOrigin={{ vertical: 'top', horizontal: 'left' }} open={Boolean(anchorElNav)} onClose={handleCloseNavMenu} sx={{ display: { xs: 'block', md: 'none' }, mt:'1rem' }}>
                                     {pages.map((page) => (
                                         <MenuItem key={page.id} onClick={handleCloseNavMenu}>
                                             <Link to={page.route}>
@@ -171,11 +187,13 @@ function DefaultNavbar(props) {
                                         <Avatar alt="Remy Sharp" src="/assets/Images/chikawa.png" />
                                     </IconButton>
                                 </Tooltip>
-                                <Menu sx={{ mt: '45px' }} id="menu-appbar" anchorEl={anchorElUser} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} keepMounted transformOrigin={{ vertical: 'top', horizontal: 'right' }} open={Boolean(anchorElUser)} onClose={handleCloseUserMenu}>
+                                <Menu sx={{ mt: '4rem'}} id="menu-appbar" anchorEl={anchorElUser} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} keepMounted transformOrigin={{ vertical: 'top', horizontal: 'right' }} open={Boolean(anchorElUser)} onClose={handleCloseUserMenu}>
                                     {settings.map((setting) => (
-                                        <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                            <Typography>{setting}</Typography>
-                                        </MenuItem>
+                                        <Link to={setting.route}>
+                                            <MenuItem key={setting.id} onClick={handleCloseUserMenu}>
+                                                <Typography>{setting.page_name}</Typography>
+                                            </MenuItem>
+                                        </Link>
                                     ))}
                                 </Menu>
                             </Box>
