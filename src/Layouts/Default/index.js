@@ -9,26 +9,55 @@ function DefaultLayout({ children }) {
         {
             route: '/',
             image: 'main-banner.png',
+            noBanner: false,
             haveContent: true
         },
         {
             route: '/vehicles',
             image: 'list-banner.png',
+            noBanner: false,
             haveContent: false
         },
         {
             route: '/devices',
             image: 'device-banner.png',
+            noBanner: false,
             haveContent: false
         },
         {
             route: '/blog',
             image: 'blog-banner.png',
+            noBanner: false,
             haveContent: false
         },
         {
             route: '/contact',
             image: 'contact-banner.png',
+            noBanner: false,
+            haveContent: false
+        },
+        {
+            route: '/profile',
+            image: null,
+            noBanner: true,
+            haveContent: false
+        },
+        {
+            route: '/account',
+            image: null,
+            noBanner: true,
+            haveContent: false
+        },
+        {
+            route: '/account/information',
+            image: null,
+            noBanner: true,
+            haveContent: false
+        },
+        {
+            route: '/account/password',
+            image: null,
+            noBanner: true,
             haveContent: false
         },
     ];
@@ -38,7 +67,10 @@ function DefaultLayout({ children }) {
 
     return (
         <div style={{ display: 'block' }}>
-            <DefaultNavbar haveContent={currentRouteData.haveContent} image={currentRouteData.image} />
+            <DefaultNavbar 
+                haveContent={currentRouteData.haveContent} 
+                image={currentRouteData.image} 
+                noBanner={currentRouteData.noBanner}/>
             <div className="body-container">
                 <div className="content">{children}</div>
             </div>

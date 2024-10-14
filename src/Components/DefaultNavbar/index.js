@@ -135,7 +135,7 @@ function DefaultNavbar(props) {
         setAnchorElUser(null);
     };
 
-    const { haveContent, image } = props
+    const { haveContent, image, noBanner } = props
 
     return (
         <div className="navbar-container">
@@ -205,7 +205,7 @@ function DefaultNavbar(props) {
             {/* Anchor for scrolling */}
             <div id="back-to-top-anchor" />
 
-            <div
+            {!noBanner ? <div
                 className="banner"
                 style={{
                     backgroundImage: `url(${process.env.PUBLIC_URL}/assets/Images/${image})`,
@@ -214,7 +214,7 @@ function DefaultNavbar(props) {
                     backgroundRepeat: 'no-repeat'
                 }}
             >
-            </div>
+            </div>: null}
 
 
             {haveContent ? <div className='banner-content'>

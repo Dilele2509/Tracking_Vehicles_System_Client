@@ -98,6 +98,10 @@
     color: var(--primary-gray);
 }
 
+.footer-logo .social{
+    display: flex;
+}
+
 .footer-sign {
     padding: 24px; /* Consistent padding for the sign */
     flex-basis: 100%;

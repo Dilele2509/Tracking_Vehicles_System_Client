@@ -1,0 +1,9 @@
+.post-content {
+    font-size: 0.8rem;
+}
+
+.read-more-btn{
+    font-size: .8rem;
+    margin-left: .5rem;
+    color: var(--blue);
+}

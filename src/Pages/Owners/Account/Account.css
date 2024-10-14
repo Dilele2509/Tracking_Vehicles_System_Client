@@ -1,0 +1,67 @@
+.account-container {
+    display: flex;
+    border-radius: 1rem;
+    min-height: 50rem;
+    background-color: var(--primary-white);
+}
+
+.taskbar-account {
+    flex-basis: 30%;
+    padding: .9rem;
+    border-right: 1px solid var(--primary-gray);
+}
+
+.taskbar-account label {
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--primary-gray);
+}
+
+.taskbar-set-box {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: .5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.taskbar-set-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: .5rem;
+}
+
+.taskbar-set-item p {
+    font-size: .9rem;
+    font-weight: 500;
+}
+
+.taskbar-set-item:hover p,
+.taskbar-set-item:hover .info-account-icon {
+    color: var(--primary-yellow);
+}
+
+.info-account-icon {
+    color: var(--primary-gray);
+    font-size: 1.3rem;
+    margin-right: .5rem;
+}
+
+.account-content {
+    flex-basis: 70%;
+    flex: 1;
+    /* Make this section flexible */
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 60px);
+    /* Adjust based on your layout */
+}
+
+.scrollable-content {
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    padding: 20px;
+    /* Add padding as needed */
+    flex: 1;
+    /* Allow it to fill the remaining space */
+}
