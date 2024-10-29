@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { publicRoutes, ownerRoutes, ownerAccountRoutes } from './Routes';
+import { publicRoutes, ownerRoutes, privateRoutes } from './Routes';
 import { DefaultLayout } from './Layouts/';
 import Account from './Pages/Owners/Account';
 
@@ -9,7 +9,7 @@ function App() {
     <Router>
       <div className="App blankPage">
         <Routes>
-          {ownerRoutes.map((route, index) => {
+          {privateRoutes.map((route, index) => {
             const Page = route.component;
 
             let Layout = DefaultLayout;
@@ -31,8 +31,12 @@ function App() {
               />
             );
           })}
-          {/* Thêm route cho Account */}
-          <Route path="/account/*" element={<DefaultLayout><Account /></DefaultLayout>} />
+          {/* Thêm dấu * để cho phép các route con */}
+          <Route path="/account/*" element={
+            <DefaultLayout>
+              <Account />
+            </DefaultLayout>
+          } />
         </Routes>
       </div>
     </Router>

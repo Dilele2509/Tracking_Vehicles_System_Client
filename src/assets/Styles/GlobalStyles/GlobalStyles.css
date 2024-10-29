@@ -33,7 +33,7 @@
 .body-container {
     width: 100%;
     /* Optional: Add some default styles */
-    padding: 20px 0;
+    /* padding: 20px 0; */
     box-sizing: border-box;
     /* Ensures padding is included in width */
 }
@@ -42,7 +42,7 @@
 @media (min-width: 1024px) {
     .body-container {
         /* Adjust width for larger screens */
-        max-width: 90%;
+        /* max-width: 90%; */
         /* Optional: Set a maximum width */
         margin: 0 auto;
         /* Center the container */
@@ -53,7 +53,7 @@
 @media (max-width: 1023px) and (min-width: 768px) {
     .body-container {
         /* Adjust width for medium screens */
-        padding: 15px;
+        /* padding: 15px; */
         /* Optional: Adjust padding */
     }
 }
@@ -62,7 +62,7 @@
 @media (max-width: 767px) {
     .body-container {
         /* Full width for small screens */
-        padding: 10px;
+        /* padding: 10px; */
         /* Optional: Adjust padding */
     }
 }
