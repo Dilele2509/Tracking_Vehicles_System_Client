@@ -2,7 +2,7 @@
     cursor: pointer;
     width: 3.5rem;
     height: 3.5rem;
-    background-color: var(--primary-dark-beige);
+    background-color: var(--primary-yellow);
     border-radius: 10px;
     margin-top: 1.2rem;
     margin-left: 2rem;
@@ -35,7 +35,7 @@
 .aside-container {
     position: relative;
     padding: 1rem 0;
-    background-color: var(--primary-dark-brown);
+    background-color: var(--primary-gray);
     height: 95%;
     width: 100%;
     max-width: 20%;
@@ -62,14 +62,14 @@
 }
 
 .admin-sidebar-close:hover{
-    color: var(--primary-dark-beige);
+    color: var(--primary-yellow);
     transition: .3s;
 }
 
 .admin-sidebar-header{
     margin: 0 2rem 1.5rem 2rem;
     text-align: center;
-    border-bottom: solid 1px var(--primary-dark-beige);
+    border-bottom: solid 1px var(--primary-yellow);
 }
 
 .sidebar-logo a{
@@ -79,7 +79,7 @@
 }
 
 .sidebar-logo:hover .iconLogo{
-    color: var(--primary-dark-beige);
+    color: var(--primary-yellow);
 }
 
 .sidebar-logo .iconLogo{
@@ -110,7 +110,7 @@
 }
 
 .sidebar-checked .sidebar-list-item{
-    background-color: var(--primary-dark-beige) !important;
+    background-color: var(--primary-yellow) !important;
     color: #333 !important;
     
 }
@@ -125,7 +125,7 @@
 
 .admin-logout{
     text-align: center;
-    border-top: 1px solid var(--primary-dark-beige);    
+    border-top: 1px solid var(--primary-yellow);    
 }
 
 .admin-logout-btn {

@@ -7,8 +7,8 @@ import { IoNotifications } from "react-icons/io5";
 
 import React, { useState, useEffect } from 'react';
 import {Link} from 'react-router-dom';
-import axios from '../../../../API/axios';
-import { error } from 'jquery';
+import axios from '../../api/axios'
+/* import { error } from 'jquery'; */
 
 function AdminHeader() {
   const config = {
@@ -18,7 +18,7 @@ function AdminHeader() {
         withCredentials: true  
 }
   const [admin, setAdmin] = useState([])
-  useEffect(()=>{
+/*   useEffect(()=>{
     axios.get('/user/id/', config)
       .then((response)=>{
         setAdmin(response.data.user[0])
@@ -27,7 +27,7 @@ function AdminHeader() {
       .catch((error)=>{
         console.log(error.message);
       })
-  })
+  }) */
   return (
       <div className='div-header'>
       <div className="admin-header">
@@ -38,7 +38,7 @@ function AdminHeader() {
             <Link to='/notification' className='admin-noti-icon'><IoNotifications className='icon-admin-header'/></Link>
             <Link to='/admin-profile' className="icon-link-admin">
                 <MdOutlineAccountCircle className="icon-admin-header icon-admin-account" />
-                <span className='admin-name'>{admin.fullname}</span>
+                <span className='admin-name'>{/* {admin.fullname} */}admin</span>
             </Link>     
         </div>
       </div>

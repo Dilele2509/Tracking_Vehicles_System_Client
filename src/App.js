@@ -2,7 +2,6 @@ import { Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { publicRoutes, ownerRoutes, privateRoutes } from './Routes';
 import { DefaultLayout, Blank, AdminDefault } from './Layouts/';
-// import {HomePageAdmin} from './Pages/Admin/HomePageAdmin';
 import Account from './Pages/Owners/Account';
 
 function App() {

@@ -10,11 +10,12 @@
 }
 
 .admin-header {
+    padding: .7rem;
     display: flex;
     flex-flow: row;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--primary-dark-beige);
+    background-color: var(--primary-yellow);
     width: 98%;
     margin: 1.2rem auto 0 auto;
     padding-left: 1rem;
@@ -62,13 +63,13 @@
 }  
 
 .icon-link-admin:hover{
-    border-color: var(--primary-dark-brown);
+    border-color: var(--primary-gray);
     transition-duration: .5s !important;
 }
 
 .icon-link-admin:hover .admin-name,
 .icon-link-admin:hover .icon-admin-account{
-    color: var(--primary-dark-brown);
+    color: var(--primary-gray);
     transition-duration: .5s;
 }
 

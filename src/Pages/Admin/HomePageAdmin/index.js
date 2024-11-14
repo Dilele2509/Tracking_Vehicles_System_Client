@@ -13,7 +13,7 @@ function HomePage() {
   const [userList, setUserList] = useState([]);
   const [editingUserId, setEditingUserId] = useState(null);
   const [userData, setUserData] = useState({ full_name: '', email: '', phone_num: '', address: '' });
-  const [isModalVisible, setIsModalVisible, setModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   // Define functions
   const handleInputChange = (e) => {
@@ -38,7 +38,7 @@ function HomePage() {
     // Toggle user status logic here
   };
   const handleOpenModal = () => {
-    setModalVisible(true);
+    setIsModalVisible(true);
   }
 
 

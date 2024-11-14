@@ -1,12 +1,12 @@
 import './AdminSidebar.css'
-import '../Header/Header.css';
+import '../Header/Header.css'
 
 import { IoMdClose } from "react-icons/io";
 import { HiMenu } from "react-icons/hi";
 
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from '../../../../API/axios'
+import axios from '../../api/axios';
 
 function AdminSidebar() {
     const [activeLink, setActiveLink] = useState('/');
@@ -25,8 +25,8 @@ function AdminSidebar() {
 
     const handleLogout = async () => {
         try {
-            const response = await axios.get('/logout', config);
-            console.log(response);
+            /* const response = await axios.get('/logout', config);
+            console.log(response); */
             window.location.href = '/';
         } catch (error) {
             console.log(error.message);
@@ -87,11 +87,11 @@ function AdminSidebar() {
                         >
                             <li className='sidebar-list-item'>Category</li>
                         </Link>
-                        <Link to='/product'
-                            onClick={() => handleChangePage('/product')}
-                            className={activeLink === '/product' ? 'sidebar-checked' : ''}
+                        <Link to='/vehicle'
+                            onClick={() => handleChangePage('/vehicle')}
+                            className={activeLink === '/vehicle' ? 'sidebar-checked' : ''}
                         >
-                            <li className='sidebar-list-item'>Products</li>
+                            <li className='sidebar-list-item'>Vehicles</li>
                         </Link>
                         <Link to='/order'
                             onClick={() => handleChangePage('/order')}

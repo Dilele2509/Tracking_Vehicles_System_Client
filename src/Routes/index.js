@@ -1,5 +1,5 @@
 // Import layouts
-import { DefaultLayout, Blank } from "../Layouts";
+import { DefaultLayout, Blank, AdminDefault } from "../Layouts";
 
 // Import pages
 // Owner website
@@ -16,6 +16,7 @@ import Password from "../Pages/Owners/Account/Password";
 
 // Admin
 import HomePageAdmin from "../Pages/Admin/HomePageAdmin";
+import Users from "../Pages/Admin/Users";
 
 // Define public routes
 const publicRoutes = [
@@ -27,7 +28,8 @@ const publicRoutes = [
 
 // Define private routes (for admin)
 const privateRoutes = [
-    { path: '/', component: HomePageAdmin, layout: Blank },
+    { path: '/', component: HomePageAdmin, layout: AdminDefault },
+    { path: '/user', component: Users, layout: AdminDefault },
     // Add other routes for admin as needed
 ];
 

@@ -12,7 +12,6 @@
 :root {
     --primary-yellow: #E9BD20;
     --primary-gray: #3B3B3B;
-    --primary-dark: #372D40;
     --primary-olive: #484A40;
     --primary-light-beige: #FEF6E9;
     --primary-white: #fffefd;
@@ -37,6 +36,12 @@
 }
 #root{
     height: 100%;
+}
+
+.blankPage {
+    height: 100%;
+    width: 100%;
+    display: flex;
 }
 
 html {
@@ -399,7 +404,7 @@ button {
     border-radius: 50%;
     font-size: 1.8rem;
     text-align: center;
-    background-color: var(--primary-dark-brown);
+    background-color: var(--primary-gray);
 }
 
 /* TOAST CSS */
