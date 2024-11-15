@@ -72,6 +72,7 @@ tr {
     font-size: 1.5rem;
     font-weight: 600;
     line-height: 4rem;
+    background-color: var(--primary-gray);
 }
 
 .dashboard-admin-container{
@@ -142,12 +143,12 @@ tr {
     border-radius: 10px;
 }
 
-.modal-header {
+.modal-header{
     width: 80%;
     height: 4rem;
     margin: 1rem auto;
     /* margin-bottom: -2rem; */
-    background-color: var(--primary-gray);
+    background-color: var(--primary-dark-brown);
     display: flex;
     justify-content: center;
     align-items: center;

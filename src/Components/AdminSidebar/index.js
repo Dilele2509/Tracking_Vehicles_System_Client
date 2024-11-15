@@ -75,25 +75,25 @@ function AdminSidebar() {
                         >
                             <li className='sidebar-list-item'>Dashboard</li>
                         </Link>
-                        <Link to='/user'
+                        <Link to='/userAdmin'
                             onClick={() => handleChangePage('/user')}
                             className={activeLink === '/user' ? 'sidebar-checked' : ''}
                         >
                             <li className='sidebar-list-item'>Users</li>
                         </Link>
-                        <Link to='/category'
+                        {/* <Link to='/category'
                             onClick={() => handleChangePage('/category')}
                             className={activeLink === '/category' ? 'sidebar-checked' : ''}
                         >
                             <li className='sidebar-list-item'>Category</li>
-                        </Link>
-                        <Link to='/vehicle'
+                        </Link> */}
+                        <Link to='/vehicleAdmin'
                             onClick={() => handleChangePage('/vehicle')}
                             className={activeLink === '/vehicle' ? 'sidebar-checked' : ''}
                         >
                             <li className='sidebar-list-item'>Vehicles</li>
                         </Link>
-                        <Link to='/order'
+                        {/* <Link to='/order'
                             onClick={() => handleChangePage('/order')}
                             className={activeLink === '/order' ? 'sidebar-checked' : ''}
                         >
@@ -104,7 +104,7 @@ function AdminSidebar() {
                             className={activeLink === '/feedback' ? 'sidebar-checked' : ''}
                         >
                             <li className='sidebar-list-item'>Feedbacks</li>
-                        </Link>
+                        </Link> */}
                     </ul>
                 </div>
                 <div className='admin-sidebar-footer'>
