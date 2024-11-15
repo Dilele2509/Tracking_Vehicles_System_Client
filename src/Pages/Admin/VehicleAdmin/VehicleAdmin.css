@@ -28,6 +28,69 @@
     margin-bottom: 1rem;
 }
 
+.upload-product-img {
+    width: 90%;
+    margin: 0 auto 1rem auto;
+}
+
+.change-ava-area {
+    display: flex;
+    align-items: center;
+}
+
+.default-img img {
+    width: 8rem;
+    height: 11rem;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 10px;
+    margin-right: 1rem;
+}
+
+.upload-file-container {
+    position: relative;
+    background-color: #fff;
+    border-radius: 5px;
+    border: #000 solid 1px;
+    min-width: 8rem;
+    height: 2.2rem;
+    margin-right: 1rem;
+}
+
+.upload-file-container label {
+    line-height: 2.2rem;
+    text-align: center;
+    color: #000;
+}
+
+.modal-input-area input, .modal-input-area select {
+    width: 90%;
+    height: 2.5rem;
+    padding: 0 .8rem;
+    margin: 0 auto;
+    border-radius: 10px;
+    border: .6px solid #999;
+    margin-bottom: .7rem;
+    font-size: .879rem;
+}
+
+input[type='file'] {
+    position: absolute;
+    opacity: 0;
+    width: 8rem;
+    height: 2.2rem;
+    top: 0;
+    left: 0;
+    z-index: 1111;
+}
+
+.upload-icon {
+    display: inline-block !important;
+    font-size: 1.3rem;
+    margin-bottom: -.3rem;
+    vertical-align: unset !important;
+}
+
 .add-product-btn:hover{
     color: var(--primary-light-brown);
     border: var(--primary-light-brown) solid 2px;
