@@ -217,4 +217,19 @@ td:hover .disable-check{
   overflow: hidden; /* Hide overflowing content */
 }
 
-/* ... (existing styles) */
+
+.add-product-btn {
+  color: #333;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: #333 solid 2px;
+  width: 13rem;
+  float: right;
+  margin-right: 2rem;
+  margin-bottom: 1rem;
+}

@@ -7,37 +7,101 @@ import { MdOutlineFileUpload } from "react-icons/md";
 function VehicleAdmin() {
   const [productImg, setProductImg] = useState('public/assets/images/default_pro_img.jpeg');
   const [isModalVisible, setModalVisible] = useState(false);
-  const [proList, setProList] = useState([]);
-  const [catList, setCatList] = useState([]);
-  const [editingProId, setEditingProId] = useState(null);
-  const [addData, setAddData] = useState({
-    category_id: '',
-    title: '',
-    price: '',
-    ingredients: '',
-    thumbnail: '',
-    description: '',
-    quantity: '',
-  })
-  const [proData, setProData] = useState({
-    product_id: '',
-    category_id: '',
-    title: '',
-    price: '',
-    ingredients: '',
-    thumbnail: '',
-    description: '',
-    quantity: '',
+  const [mapVisible, setMapVisible] = useState(false); 
+  const [currentLocation, setCurrentLocation] = useState(null); 
+  const [editingVehicleId, setEditingVehicleId] = useState(null);
+  const [vehicleData, setVehicleData] = useState({
+    vehicle_ID: '',
+    user_ID: '',
+    user_name: '',
+    vehicle_brand: '',
+    license_plate: '',
+    vehicle_line: '',
+    location: '',
+    parked_time: '',
+    KM_per_day: '',
     deleted: '',
-    sold: ''
   });
+
+  const [vehicleList, setVehicleList] = useState([
+    {
+      vehicle_ID: 'VEH001',
+      user_ID: 'U001',
+      user_name: 'John Doe',
+      vehicle_brand: 'Toyota',
+      license_plate: 'ABC-1234',
+      vehicle_line: 'Corolla',
+      location: { lat: 34.0522, lng: -118.2437 }, 
+      parked_time: '10:00 AM',
+      KM_per_day: 50,
+      deleted: 0,
+    },
+    {
+      vehicle_ID: 'VEH002',
+      user_ID: 'U002',
+      user_name: 'Jane Smith',
+      vehicle_brand: 'Honda',
+      license_plate: 'XYZ-5678',
+      vehicle_line: 'Civic',
+      location: { lat: 34.0522, lng: -118.2437 }, 
+      parked_time: '11:00 AM',
+      KM_per_day: 30,
+      deleted: 0,
+    },
+    {
+      vehicle_ID: 'VEH003',
+      user_ID: 'U003',
+      user_name: 'Alice Johnson',
+      vehicle_brand: 'Ford',
+      license_plate: 'LMN-9101',
+      vehicle_line: 'Focus',
+      location: { lat: 34.0522, lng: -118.2437 }, 
+      parked_time: '12:00 PM',
+      KM_per_day: 40,
+      deleted: 0,
+    },
+    {
+      vehicle_ID: 'VEH004',
+      user_ID: 'U004',
+      user_name: 'Bob Brown',
+      vehicle_brand: 'Chevrolet',
+      license_plate: 'OPQ-2345',
+      vehicle_line: 'Malibu',
+      location: { lat: 34.0522, lng: -118.2437 }, 
+      parked_time: '1:00 PM',
+      KM_per_day: 20,
+      deleted: 0,
+    },
+    {
+      vehicle_ID: 'VEH005',
+      user_ID: 'U005',
+      user_name: 'Charlie Davis',
+      vehicle_brand: 'Nissan',
+      license_plate: 'RST-6789',
+      vehicle_line: 'Altima',
+      location: { lat: 34.0522, lng: -118.2437 }, 
+      parked_time: '2:00 PM',
+      KM_per_day: 25,
+      deleted: 0,
+    },
+  ]);
+
+  const handleLocateClick = (location) => {
+    setCurrentLocation(location); 
+    setMapVisible(true); 
+  };
+
+  const handleCloseMap = () => {
+    setMapVisible(false); 
+  };
+
   const handleOpenModal = () => {
     setModalVisible(true);
   };
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
-    setProData((prevData) => ({ ...prevData, [id]: value }));
+    setVehicleData((prevData) => ({ ...prevData, [id]: value }));
   };
 
   const handleSaveClick = () => {
@@ -45,21 +109,21 @@ function VehicleAdmin() {
   };
 
   const handleCancelClick = () => {
-    setEditingProId(null);
+    setEditingVehicleId(null);
   };
 
-  const handleEditClick = (productId, product) => {
-    setEditingProId(productId);
-    setProData(product);
+  const handleEditClick = (vehicle_ID, vehicle) => {
+    setEditingVehicleId(vehicle_ID);
+    setVehicleData(vehicle);
   };
 
-  const handleToggleProStatus = (productId, product) => {
-    // Logic to toggle product status
+  const handleToggleProStatus = (vehicle_ID, vehicle) => {
+
   };
 
   const handleAddChange = (e) => {
     const { id, value } = e.target;
-    setAddData((prevData) => ({ ...prevData, [id]: value }));
+    setVehicleData((prevData) => ({ ...prevData, [id]: value }));
   };
 
   const handleCatChange = (e) => {
@@ -67,7 +131,7 @@ function VehicleAdmin() {
   };
 
   const handleAddClick = () => {
-    // Logic to add a new product
+ 
   };
 
   const handleCancelModal = () => {
@@ -82,140 +146,189 @@ function VehicleAdmin() {
           <div className='user-list-item'>
             <div className='user-list-header'>
               <div className='user-list-title'>
-                <h3>Product list</h3>
+                <h3>Vehicle List</h3>
               </div>
             </div>
             <div className='user-list-content'>
               <div className='add-product-btn' onClick={handleOpenModal}>
-                <IoAdd /> Add more product
+                <IoAdd /> Add more vehicle
               </div>
               <div className='list-table-container'>
                 <table className='table user-list-table'>
                   <thead>
                     <tr>
-                      <th>ID</th>
-                      <th>Information</th>
-                      <th>Description</th>
-                      <th>Ingredients</th>
-                      <th>Thumbnail</th>
-                      <th>Quantity</th>
-                      <th className='large-space'>Sold</th>
-                      <th className='large-space'>Deleted</th>
+                      <th>Vehicle ID</th>
+                      <th>User ID</th>
+                      <th>User Name</th>
+                      <th>Brand</th>
+                      <th>License Plate</th>
+                      <th>Line</th>
+                      <th>Location</th>
+                      <th>Parked Time</th>
+                      <th>KM/Day</th>
+                      <th>Status</th>
                       <th></th>
                       <th></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {proList.map((pro) => (
-                      <tr key={pro.product_id}>
+                    {vehicleList.map((vehicle) => (
+                      <tr key={vehicle.vehicle_ID}>
+                        {/* <td>{vehicle.vehicle_ID}</td>
+                        <td>{vehicle.user_ID}</td>
+                        <td>{vehicle.user_name}</td>
+                        <td>{vehicle.vehicle_brand}</td>
+                        <td>{vehicle.license_plate}</td>
+                        <td>{vehicle.vehicle_line}</td>
                         <td>
-                          <span>{pro.product_id}</span>
+                          {vehicle.location}
+                          <button onClick={() => handleLocateClick(vehicle.location)}>Locate</button>
                         </td>
+                        <td>{vehicle.parked_time}</td>
+                        <td>{vehicle.KM_per_day}</td>
+                        <td>{vehicle.status}</td> */}
                         <td className='info-long-text'>
                           <div className='td-contain-info'>
-                            <div className='user-img-list pro-img-list'>
+                            {/* <div className='user-img-list pro-img-list'>
                               <img src={pro.thumbnail} alt='pro-img' />
-                            </div>
+                            </div> */}
                             <div className='user-info-list'>
-                              {editingProId === pro.product_id ? (
+                              {editingVehicleId === vehicle.vehicle_ID ? (
                                 <>
                                   <input
                                     type='text'
-                                    value={proData.title}
+                                    value={vehicleData.vehicle_ID}
                                     id='title'
                                     onChange={handleInputChange}
                                   /><br />
-                                  <input
-                                    type='text'
-                                    value={proData.category_id}
-                                    id='category_id'
-                                    onChange={handleInputChange}
-                                  /><br />
-                                  <input
-                                    type='text'
-                                    id='price'
-                                    value={proData.price}
-                                    onChange={handleInputChange}
-                                  />
                                 </>
                               ) : (
                                 <>
-                                  <h4>{pro.title}</h4>
-                                  <span>Category_id: {pro.category_id}</span><br />
-                                  <span>{pro.price} VND</span>
+                                  <span>{vehicle.vehicle_ID}</span>
                                 </>
                               )}
                             </div>
                           </div>
                         </td>
                         <td className='long-text-container'>
-                          {editingProId === pro.product_id ? (
+                          {editingVehicleId === vehicle.vehicle_ID ? (
                             <input
                               type='text'
-                              value={proData.description}
-                              id='description'
+                              value={vehicleData.user_ID}
+                              id='user_ID'
                               onChange={handleInputChange}
                             />
                           ) : (
-                            <span>{pro.description}</span>
+                            <span>{vehicle.user_ID}</span>
                           )}
                         </td>
                         <td className='long-text-container'>
-                          {editingProId === pro.product_id ? (
+                          {editingVehicleId === vehicle.vehicle_ID ? (
                             <input
                               type='text'
-                              value={proData.ingredients}
-                              id='ingredients'
+                              value={vehicleData.user_name}
+                              id='user_name'
                               onChange={handleInputChange}
                             />
                           ) : (
-                            <span>{pro.ingredients}</span>
+                            <span>{vehicle.user_name}</span>
                           )}
                         </td>
                         <td className='long-text-container'>
-                          {editingProId === pro.product_id ? (
+                          {editingVehicleId === vehicle.vehicle_ID ? (
                             <input
                               type='text'
-                              value={proData.thumbnail}
-                              id='thumbnail'
+                              value={vehicleData.vehicle_brand}
+                              id='vehicle_brand'
                               onChange={handleInputChange}
                             />
                           ) : (
-                            <span>{pro.thumbnail}</span>
+                            <span>{vehicle.vehicle_brand}</span>
                           )}
                         </td>
                         <td>
-                          {editingProId === pro.product_id ? (
+                          {editingVehicleId === vehicle.vehicle_ID ? (
                             <input
                               type='text'
-                              value={proData.quantity}
-                              id='quantity'
+                              value={vehicleData.license_plate}
+                              id='license_plate'
                               onChange={handleInputChange}
                             />
                           ) : (
-                            <span>{pro.quantity}</span>
+                            <span>{vehicle.license_plate}</span>
                           )}
                         </td>
-                        <td >
-                          <span>{pro.sold}</span>
-                        </td>
                         <td>
-                          <span>{pro.deleted}</span>
+                          {editingVehicleId === vehicle.vehicle_ID ? (
+                            <input
+                              type='text'
+                              value={vehicleData.vehicle_line}
+                              id='vehicle_line'
+                              onChange={handleInputChange}
+                            />
+                          ) : (
+                            <span>{vehicle.vehicle_line}</span>
+                          )}
                         </td>
+
                         <td>
-                          {editingProId === pro.product_id ? (
+                          {editingVehicleId === vehicle.vehicle_ID ? (
+                            <input
+                              type='text'
+                              value={vehicleData.location}
+                              id='location'
+                              onChange={handleInputChange}
+                            />
+                          ) : (
+                            <td><button className='current-location-btn' onClick={() => handleLocateClick(vehicle.location)}>Current Location</button>
+                            </td>
+                           )}
+                        </td>
+
+                        <td>
+                          {editingVehicleId === vehicle.vehicle_ID ? (
+                            <input
+                              type='text'
+                              value={vehicleData.parked_time}
+                              id='parked_time'
+                              onChange={handleInputChange}
+                            />
+                          ) : (
+                            <span>{vehicle.parked_time}</span>
+                          )}
+                        </td>
+
+                        <td>
+                          {editingVehicleId === vehicle.vehicle_ID ? (
+                            <input
+                              type='text'
+                              value={vehicleData.KM_per_day}
+                              id='KM_per_day'
+                              onChange={handleInputChange}
+                            />
+                          ) : (
+                            <span>{vehicle.KM_per_day}</span>
+                          )}
+                        </td>
+
+                        <td>
+                          <span>{vehicle.deleted}</span>
+                        </td>
+
+                        <td>
+                          {editingVehicleId === vehicle.vehicle_ID ? (
                             <>
                               <button className='edit-list-btn save-list-btn' onClick={handleSaveClick}>Save</button>
                               <button className='edit-list-btn cancel-list-btn' onClick={handleCancelClick}>Cancel</button>
                             </>
                           ) : (
-                            <button className='edit-list-btn' onClick={() => handleEditClick(pro.product_id, pro)}>Edit</button>
+                            <button className='edit-list-btn' onClick={() => handleEditClick(vehicle.vehicle_ID, vehicle)}>Edit</button>
                           )}
                         </td>
                         <td>
                           <div
-                            className={`switch-icon ${pro.deleted === 1 ? 'disable-check' : ''}`}
-                            onClick={() => handleToggleProStatus(pro.product_id, pro)}
+                            className={`switch-icon ${vehicle.deleted === 1 ? 'disable-check' : ''}`}
+                            onClick={() => handleToggleProStatus(vehicle.vehicle_ID, vehicle)}
                           >
                             <FaPowerOff />
                           </div>
@@ -229,11 +342,30 @@ function VehicleAdmin() {
           </div>
         </div>
       </div>
+      {/* Map Popup */}
+      {mapVisible && currentLocation && (
+        <div className='map-popup'>
+          <div className='map-header'>
+            <h3>Vehicle Location</h3>
+            <button onClick={handleCloseMap}>Close</button>
+          </div>
+          <div className='map-content'>
+            {/* Google Maps Embed or Component */}
+            <iframe
+              width="600"
+              height="450"
+              src={`https://www.google.com/maps/embed/v1/view?key=YOUR_API_KEY&center=${currentLocation.lat},${currentLocation.lng}&zoom=15`}
+              allowFullScreen
+            ></iframe>
+          </div>
+        </div>
+      )}
+
       {/* modal add */}
       <div className={`modal-add ${isModalVisible ? 'modal-visible' : 'modal-hidden'}`}>
         <div className='modal-container'>
           <div className='modal-header'>
-            <h3>ADD PRODUCT</h3>
+            <h3>ADD VEHICLE</h3>
           </div>
           <div className='modal-content'>
             <div className='modal-input-area'>
@@ -253,20 +385,13 @@ function VehicleAdmin() {
                 onChange={handleAddChange}
               />
               <select
-                value={proData.category_id !== null ? proData.category_id : 'null'}
+                value={vehicleData.vehicle_ID !== null ? vehicleData.vehicle_ID : 'null'}
                 onChange={(e) => {
                   handleCatChange(e);
                   handleInputChange(e);
                 }}
               >
                 <option value='null'>Select Category</option>
-                {catList.map((cat) => (
-                  cat.deleted != 1 && (
-                    <>
-                      <option value={cat.category_id}>{cat.category_name}</option>
-                    </>
-                  )
-                ))}
               </select>
               <input
                 type='text'

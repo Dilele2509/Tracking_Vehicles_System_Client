@@ -10,7 +10,19 @@ function HomePage() {
   const [userLength, setUserLength] = useState(0);
   const [proLength, setProLength] = useState(0);
   const [orderLength, setOrderLength] = useState(0);
-  const [userList, setUserList] = useState([]);
+  const [userList, setUserList] = useState([
+    {
+      user_id: 1,
+      full_name: 'Vy Le',
+      email: 'vyle2509@gmail.com',
+      phone_num: '0966480829',
+      address: '68 Lý Tự Trọng',
+      deleted: 0,
+      role_id: 1,
+      avatar: require('../../../assets/avatar/images.jpg'),
+    },
+
+  ]);
   const [editingUserId, setEditingUserId] = useState(null);
   const [userData, setUserData] = useState({ full_name: '', email: '', phone_num: '', address: '' });
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -106,7 +118,7 @@ function HomePage() {
                     <tr>
                       <th>ID</th>
                       <th>Admin</th>
-                      <th>Phone-number</th>
+                      <th>Phone Number</th>
                       <th>Address</th>
                       <th>Status</th>
                       <th></th>
@@ -116,7 +128,7 @@ function HomePage() {
                   <tbody>
                     {/* Map over user list then display them */}
                     {userList.map((user) => (
-                      user.role_id === 2 ? (
+                      user.role_id === 1 ? (
                         <tr key={user.user_id}>
                           <td>
                             <span>{user.user_id}</span>
@@ -232,7 +244,7 @@ function HomePage() {
               />
               <input
                 type='text'
-                placeholder='admin email'
+                placeholder='Admin email'
                 id='email'
                 onChange={handleAddChange}
               />

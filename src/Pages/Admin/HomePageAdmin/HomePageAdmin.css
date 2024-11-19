@@ -3,9 +3,9 @@
     margin-top: 3rem;
 }
 
-.user-list-content{
+/* .user-list-content{
 
-}
+} */
 
 .add-product-btn {
     color: #333;
@@ -45,7 +45,7 @@
 
 tr {
     display: table-row;
-    vertical-align: inherit;
+    vertical-align: middle;
     border-color: inherit;
 }
 
@@ -53,6 +53,15 @@ tr {
     min-height: 3rem;
     font-size: 1rem;
     color: #444;
+    text-align: left; /* Align header text to the left */
+    padding: 0.8rem; /* Add padding for better spacing */
+    border-bottom: 1px solid #ddd; /* Add a bottom border for separation */
+}
+
+.user-list-table > tbody > tr > td {
+    padding: 0.8rem; /* Add padding for table cells */
+    vertical-align: middle; /* Center content vertically */
+    border-bottom: 1px solid #ddd; /* Add a bottom border for separation */
 }
 
 .user-list-title {
@@ -68,7 +77,7 @@ tr {
     text-align: center;
 }
 
-.user-list-title h3{
+.user-list-title h3 {
     font-size: 1.5rem;
     font-weight: 600;
     line-height: 4rem;
@@ -217,4 +226,26 @@ tr {
 .modal-cancel {
     width: 6rem;
     background: #fb1f1f !important;
+}
+
+.edit-list-btn {
+    width: 60px;
+    height: 2rem;
+    font-size: .879rem;
+    font-weight: 500;
+    border-radius: 10px;
+    background-color: #E9BD20 !important;
+}
+.switch-icon {
+    width: 2.2rem;
+    height: 2.2rem; 
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #eee;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    border-radius: 10px;
+    background-color: #38E54D;
+    padding: 0; 
 }
