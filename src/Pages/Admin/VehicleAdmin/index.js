@@ -6,9 +6,10 @@ import { MdOutlineFileUpload } from "react-icons/md";
 
 function VehicleAdmin() {
   const [productImg, setProductImg] = useState('public/assets/images/default_pro_img.jpeg');
+  const GGMap_API = process.env.GGMap_API
   const [isModalVisible, setModalVisible] = useState(false);
-  const [mapVisible, setMapVisible] = useState(false); 
-  const [currentLocation, setCurrentLocation] = useState(null); 
+  const [mapVisible, setMapVisible] = useState(false);
+  const [currentLocation, setCurrentLocation] = useState(null);
   const [editingVehicleId, setEditingVehicleId] = useState(null);
   const [vehicleData, setVehicleData] = useState({
     vehicle_ID: '',
@@ -31,7 +32,7 @@ function VehicleAdmin() {
       vehicle_brand: 'Toyota',
       license_plate: 'ABC-1234',
       vehicle_line: 'Corolla',
-      location: { lat: 34.0522, lng: -118.2437 }, 
+      location: { lat: 10.762622, lng: 106.660172 },
       parked_time: '10:00 AM',
       KM_per_day: 50,
       deleted: 0,
@@ -43,7 +44,7 @@ function VehicleAdmin() {
       vehicle_brand: 'Honda',
       license_plate: 'XYZ-5678',
       vehicle_line: 'Civic',
-      location: { lat: 34.0522, lng: -118.2437 }, 
+      location: { lat: 10.762622, lng: 106.660172 },
       parked_time: '11:00 AM',
       KM_per_day: 30,
       deleted: 0,
@@ -55,7 +56,7 @@ function VehicleAdmin() {
       vehicle_brand: 'Ford',
       license_plate: 'LMN-9101',
       vehicle_line: 'Focus',
-      location: { lat: 34.0522, lng: -118.2437 }, 
+      location: { lat: 10.762622, lng: 106.660172 },
       parked_time: '12:00 PM',
       KM_per_day: 40,
       deleted: 0,
@@ -67,7 +68,7 @@ function VehicleAdmin() {
       vehicle_brand: 'Chevrolet',
       license_plate: 'OPQ-2345',
       vehicle_line: 'Malibu',
-      location: { lat: 34.0522, lng: -118.2437 }, 
+      location: { lat: 10.762622, lng: 106.660172 },
       parked_time: '1:00 PM',
       KM_per_day: 20,
       deleted: 0,
@@ -79,7 +80,7 @@ function VehicleAdmin() {
       vehicle_brand: 'Nissan',
       license_plate: 'RST-6789',
       vehicle_line: 'Altima',
-      location: { lat: 34.0522, lng: -118.2437 }, 
+      location: { lat: 10.762622, lng: 106.660172 },
       parked_time: '2:00 PM',
       KM_per_day: 25,
       deleted: 0,
@@ -87,12 +88,12 @@ function VehicleAdmin() {
   ]);
 
   const handleLocateClick = (location) => {
-    setCurrentLocation(location); 
-    setMapVisible(true); 
+    setCurrentLocation(location);
+    setMapVisible(true);
   };
 
   const handleCloseMap = () => {
-    setMapVisible(false); 
+    setMapVisible(false);
   };
 
   const handleOpenModal = () => {
@@ -131,7 +132,7 @@ function VehicleAdmin() {
   };
 
   const handleAddClick = () => {
- 
+
   };
 
   const handleCancelModal = () => {
@@ -282,7 +283,7 @@ function VehicleAdmin() {
                           ) : (
                             <td><button className='current-location-btn' onClick={() => handleLocateClick(vehicle.location)}>Current Location</button>
                             </td>
-                           )}
+                          )}
                         </td>
 
                         <td>
@@ -354,7 +355,10 @@ function VehicleAdmin() {
             <iframe
               width="600"
               height="450"
-              src={`https://www.google.com/maps/embed/v1/view?key=YOUR_API_KEY&center=${currentLocation.lat},${currentLocation.lng}&zoom=15`}
+              // src={`https://www.google.com/maps/embed/v1/search?key=${GGMap_API}&q=record+stores+in+Vietnam=${currentLocation.lat},${currentLocation.lng}&zoom=15`}
+              // src={`https://www.google.com/maps/embed/v1/view?key=${GGMap_API}&center=10.7769,106.7009&zoom=15`}
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&libraries=marker&v=beta&solution_channel=GMP_CCS_reversegeocoding_v3"
+
               allowFullScreen
             ></iframe>
           </div>
@@ -432,3 +436,7 @@ function VehicleAdmin() {
 }
 
 export default VehicleAdmin;
+
+
+
+
