@@ -10,7 +10,7 @@ import axios from '../../api/axios';
 
 function AdminSidebar() {
     const [activeLink, setActiveLink] = useState('/');
-    const [sidebarOpen, setSidebarOpen] = useState(false); // Thêm state để theo dõi trạng thái sidebar
+    const [sidebarOpen, setSidebarOpen] = useState(false); 
     const [showButton, setShowButton] = useState(true);
     const config = {
         headers: {
@@ -69,42 +69,31 @@ function AdminSidebar() {
                 </div>
                 <div className='admin-sidebar-content'>
                     <ul className='sidebar-list'>
+
                         <Link to='/'
                             onClick={() => handleChangePage('/')}
                             className={activeLink === '/' ? 'sidebar-checked' : ''}
                         >
                             <li className='sidebar-list-item'>Dashboard</li>
                         </Link>
+                        <Link to='/admin'
+                            onClick={() => handleChangePage('/')}
+                            className={activeLink === '/' ? 'sidebar-checked' : ''}
+                        >
+                            <li className='sidebar-list-item'>Admin</li>
+                        </Link>
                         <Link to='/userAdmin'
                             onClick={() => handleChangePage('/user')}
                             className={activeLink === '/user' ? 'sidebar-checked' : ''}
                         >
-                            <li className='sidebar-list-item'>Users</li>
+                            <li className='sidebar-list-item'>Driver</li>
                         </Link>
-                        {/* <Link to='/category'
-                            onClick={() => handleChangePage('/category')}
-                            className={activeLink === '/category' ? 'sidebar-checked' : ''}
-                        >
-                            <li className='sidebar-list-item'>Category</li>
-                        </Link> */}
                         <Link to='/vehicleAdmin'
                             onClick={() => handleChangePage('/vehicle')}
                             className={activeLink === '/vehicle' ? 'sidebar-checked' : ''}
                         >
-                            <li className='sidebar-list-item'>Vehicles</li>
+                            <li className='sidebar-list-item'>Vehicle</li>
                         </Link>
-                        {/* <Link to='/order'
-                            onClick={() => handleChangePage('/order')}
-                            className={activeLink === '/order' ? 'sidebar-checked' : ''}
-                        >
-                            <li className='sidebar-list-item'>Orders</li>
-                        </Link>
-                        <Link to='/feedback'
-                            onClick={() => handleChangePage('/feedback')}
-                            className={activeLink === '/feedback' ? 'sidebar-checked' : ''}
-                        >
-                            <li className='sidebar-list-item'>Feedbacks</li>
-                        </Link> */}
                     </ul>
                 </div>
                 <div className='admin-sidebar-footer'>

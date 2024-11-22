@@ -1,0 +1,93 @@
+.revenue-chart-container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+  }
+  
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 10px;
+  }
+  
+  .chart-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+  }
+  
+  .time-filter-select {
+    padding: 8px 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background-color: white;
+    color: #374151;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+  }
+  
+  .time-filter-select:hover {
+    border-color: #3b82f6;
+  }
+  
+  .time-filter-select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  }
+  
+  .chart-wrapper {
+    height: 400px;
+    width: 100%;
+    padding: 10px;
+  }
+  
+  /* Custom tooltip styles */
+  .custom-tooltip {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .custom-tooltip-label {
+    color: #6b7280;
+    font-size: 0.875rem;
+    margin-bottom: 4px;
+  }
+  
+  .custom-tooltip-value {
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 640px) {
+    .revenue-chart-container {
+      padding: 15px;
+    }
+  
+    .chart-header {
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+    }
+  
+    .chart-title {
+      font-size: 1.25rem;
+    }
+  
+    .chart-wrapper {
+      height: 300px;
+    }
+  }

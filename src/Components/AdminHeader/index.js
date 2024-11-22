@@ -36,7 +36,7 @@ function AdminHeader() {
         </div>
         <div className="admin-header-func">
             <Link to='/notification' className='admin-noti-icon'><IoNotifications className='icon-admin-header'/></Link>
-            <Link to='/admin-profile' className="icon-link-admin">
+            <Link to='/adminProfile' className="icon-link-admin">
                 <MdOutlineAccountCircle className="icon-admin-header icon-admin-account" />
                 <span className='admin-name'>{/* {admin.fullname} */}admin</span>
             </Link>     

@@ -15,6 +15,7 @@ import Information from "../Pages/Owners/Account/Information";
 import Password from "../Pages/Owners/Account/Password";
 
 // Admin
+import DashBoard from "../Pages/Admin/DashBoard";
 import HomePageAdmin from "../Pages/Admin/HomePageAdmin";
 import Users from "../Pages/Admin/Users";
 import VehicleAdmin from "../Pages/Admin/VehicleAdmin";
@@ -29,10 +30,11 @@ const publicRoutes = [
 
 // Define private routes (for admin)
 const privateRoutes = [
-    { path: '/', component: HomePageAdmin, layout: AdminDefault },
+    {path: '/', component: DashBoard, layout: AdminDefault},
+    { path: '/admin', component: HomePageAdmin, layout: AdminDefault },
     { path: '/userAdmin', component: Users, layout: AdminDefault },
     { path: '/vehicleAdmin', component: VehicleAdmin, layout: AdminDefault },
-    { path: '/admin-profile', component: AdminProfile, layout: AdminDefault },
+    { path: '/adminProfile', component: AdminProfile, layout: AdminDefault },
     
     // Add other routes for admin as needed
 ];

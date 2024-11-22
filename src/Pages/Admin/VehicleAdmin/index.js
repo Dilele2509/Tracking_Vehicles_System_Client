@@ -3,6 +3,10 @@ import './VehicleAdmin.css'
 import { FaPowerOff } from "react-icons/fa6";
 import { IoAdd } from "react-icons/io5";
 import { MdOutlineFileUpload } from "react-icons/md";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+
 
 function VehicleAdmin() {
   const [productImg, setProductImg] = useState('public/assets/images/default_pro_img.jpeg');
@@ -87,9 +91,15 @@ function VehicleAdmin() {
     },
   ]);
 
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+
   const handleLocateClick = (location) => {
     setCurrentLocation(location);
     setMapVisible(true);
+    const { lat, lng } = location;
+    setLatitude(lat);
+    setLongitude(lng);
   };
 
   const handleCloseMap = () => {
@@ -138,6 +148,13 @@ function VehicleAdmin() {
   const handleCancelModal = () => {
     setModalVisible(false);
   };
+
+  delete L.Icon.Default.prototype._getIconUrl;
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon-2x.png",
+    iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",
+    shadowUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png",
+  });
 
 
   return (
@@ -190,9 +207,6 @@ function VehicleAdmin() {
                         <td>{vehicle.status}</td> */}
                         <td className='info-long-text'>
                           <div className='td-contain-info'>
-                            {/* <div className='user-img-list pro-img-list'>
-                              <img src={pro.thumbnail} alt='pro-img' />
-                            </div> */}
                             <div className='user-info-list'>
                               {editingVehicleId === vehicle.vehicle_ID ? (
                                 <>
@@ -281,7 +295,8 @@ function VehicleAdmin() {
                               onChange={handleInputChange}
                             />
                           ) : (
-                            <td><button className='current-location-btn' onClick={() => handleLocateClick(vehicle.location)}>Current Location</button>
+                            <td>
+                              <button className='current-location-btn' onClick={() => handleLocateClick(vehicle.location)}>Current Location</button>
                             </td>
                           )}
                         </td>
@@ -351,16 +366,27 @@ function VehicleAdmin() {
             <button onClick={handleCloseMap}>Close</button>
           </div>
           <div className='map-content'>
-            {/* Google Maps Embed or Component */}
-            <iframe
-              width="600"
-              height="450"
-              // src={`https://www.google.com/maps/embed/v1/search?key=${GGMap_API}&q=record+stores+in+Vietnam=${currentLocation.lat},${currentLocation.lng}&zoom=15`}
-              // src={`https://www.google.com/maps/embed/v1/view?key=${GGMap_API}&center=10.7769,106.7009&zoom=15`}
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&libraries=marker&v=beta&solution_channel=GMP_CCS_reversegeocoding_v3"
-
-              allowFullScreen
-            ></iframe>
+            <MapContainer
+              center={[latitude, longitude]}
+              zoom={15}
+              style={{ height: "400px", width: "100%" }}
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              />
+              <Marker position={[latitude, longitude]}>
+                <Popup>
+                  {vehicleData.vehicle_brand} {vehicleData.vehicle_line}
+                  <br />
+                  License Plate: {vehicleData.license_plate}
+                  <br />
+                  Latitude: {latitude}
+                  <br />
+                  Longitude: {longitude}
+                </Popup>
+              </Marker>
+            </MapContainer>
           </div>
         </div>
       )}
