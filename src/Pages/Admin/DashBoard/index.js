@@ -1,5 +1,5 @@
 import React from 'react';
-import DashBoardChart from '../../../Components/DashBoardChart'; // Adjust the path as necessary
+import DashBoardChart from '../../../Components/DashBoardChart'; 
 
 
 function DashBoard() {
