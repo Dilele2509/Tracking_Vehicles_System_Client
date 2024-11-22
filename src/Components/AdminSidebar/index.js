@@ -3,7 +3,6 @@ import '../Header/Header.css'
 
 import { IoMdClose } from "react-icons/io";
 import { HiMenu } from "react-icons/hi";
-
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from '../../api/axios';
@@ -77,8 +76,8 @@ function AdminSidebar() {
                             <li className='sidebar-list-item'>Dashboard</li>
                         </Link>
                         <Link to='/admin'
-                            onClick={() => handleChangePage('/')}
-                            className={activeLink === '/' ? 'sidebar-checked' : ''}
+                            onClick={() => handleChangePage('/admin')}
+                            className={activeLink === '/admin' ? 'sidebar-checked' : ''}
                         >
                             <li className='sidebar-list-item'>Admin</li>
                         </Link>
@@ -96,8 +95,8 @@ function AdminSidebar() {
                         </Link>
                         
                         <Link to='/driverError'
-                            onClick={() => handleChangePage('/vehicle')}
-                            className={activeLink === '/vehicle' ? 'sidebar-checked' : ''}
+                            onClick={() => handleChangePage('/driverError')}
+                            className={activeLink === '/driverError' ? 'sidebar-checked' : ''}
                         >
                             <li className='sidebar-list-item'>Driver Violation</li>
                         </Link>
