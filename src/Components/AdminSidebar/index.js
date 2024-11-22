@@ -94,6 +94,14 @@ function AdminSidebar() {
                         >
                             <li className='sidebar-list-item'>Vehicle</li>
                         </Link>
+                        
+                        <Link to='/driverError'
+                            onClick={() => handleChangePage('/vehicle')}
+                            className={activeLink === '/vehicle' ? 'sidebar-checked' : ''}
+                        >
+                            <li className='sidebar-list-item'>Driver Violation</li>
+                        </Link>
+
                     </ul>
                 </div>
                 <div className='admin-sidebar-footer'>

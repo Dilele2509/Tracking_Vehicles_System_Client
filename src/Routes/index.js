@@ -20,6 +20,7 @@ import HomePageAdmin from "../Pages/Admin/HomePageAdmin";
 import Users from "../Pages/Admin/Users";
 import VehicleAdmin from "../Pages/Admin/VehicleAdmin";
 import AdminProfile from "../Pages/Admin/AdminProfile";
+import DriverError from "../Pages/Admin/DriverError";
 // Define public routes
 const publicRoutes = [
     { path: '/', component: Authentication, layout: Blank },
@@ -35,6 +36,7 @@ const privateRoutes = [
     { path: '/userAdmin', component: Users, layout: AdminDefault },
     { path: '/vehicleAdmin', component: VehicleAdmin, layout: AdminDefault },
     { path: '/adminProfile', component: AdminProfile, layout: AdminDefault },
+    { path: '/driverError', component: DriverError, layout: AdminDefault },
     
     // Add other routes for admin as needed
 ];
