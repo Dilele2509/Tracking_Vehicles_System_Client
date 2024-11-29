@@ -106,7 +106,7 @@
 }
 
 .user-list-table >tbody>tr>td input:last-child{
-    margin-top: .3rem;
+    /* margin-top: .3rem; */
 }
 
 .user-list-table >tbody>tr>td input:focus,
@@ -153,7 +153,6 @@
     font-size: .879rem;
     font-weight: 500;
     border-radius: 10px;
-    background-color: var(--primary-dark-beige); 
 }
 
 .edit-list-btn:hover{
@@ -162,8 +161,13 @@
     transition: .2s;
 }
 
+.save-list-btn{
+  background-color: var(--blue) !important;
+  color: #eee;
+}
+
 .cancel-list-btn{
-    background-color: rgb(206, 28, 28);
+    background-color: var(--red) !important;
     color: #eee;
     margin-left: .5rem;
 }

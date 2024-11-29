@@ -3,12 +3,12 @@ import '../Header/Header.css'
 
 import { IoMdClose } from "react-icons/io";
 import { HiMenu } from "react-icons/hi";
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import axios from '../../api/axios';
 
 function AdminSidebar() {
-    const [activeLink, setActiveLink] = useState('/');
+    const location = useLocation();  // Lấy đường dẫn hiện tại
     const [sidebarOpen, setSidebarOpen] = useState(false); 
     const [showButton, setShowButton] = useState(true);
     const config = {
@@ -18,14 +18,13 @@ function AdminSidebar() {
         withCredentials: true
     }
 
-    const handleChangePage = (to) => {
-        setActiveLink(to);
-    };
+    // Tự động cập nhật activeLink theo URL hiện tại
+    const activeLink = location.pathname;
 
     const handleLogout = async () => {
         try {
-            /* const response = await axios.get('/logout', config);
-            console.log(response); */
+            const response = await axios.get('/login/logout', config);
+            console.log(response);
             window.location.href = '/';
         } catch (error) {
             console.log(error.message);
@@ -62,7 +61,7 @@ function AdminSidebar() {
                 <div className='admin-sidebar-header'>
                     <div className="sidebar-logo">
                         <a href="/">
-                            <div className="iconLogo">UrCake</div>
+                            <div className="iconLogo">HaLee</div>
                         </a>
                     </div>
                 </div>
@@ -70,35 +69,30 @@ function AdminSidebar() {
                     <ul className='sidebar-list'>
 
                         <Link to='/'
-                            onClick={() => handleChangePage('/')}
                             className={activeLink === '/' ? 'sidebar-checked' : ''}
                         >
                             <li className='sidebar-list-item'>Dashboard</li>
                         </Link>
                         <Link to='/admin'
-                            onClick={() => handleChangePage('/admin')}
                             className={activeLink === '/admin' ? 'sidebar-checked' : ''}
                         >
                             <li className='sidebar-list-item'>Admin</li>
                         </Link>
                         <Link to='/userAdmin'
-                            onClick={() => handleChangePage('/user')}
-                            className={activeLink === '/user' ? 'sidebar-checked' : ''}
+                            className={activeLink === '/userAdmin' ? 'sidebar-checked' : ''}
                         >
                             <li className='sidebar-list-item'>Driver</li>
                         </Link>
                         <Link to='/vehicleAdmin'
-                            onClick={() => handleChangePage('/vehicle')}
-                            className={activeLink === '/vehicle' ? 'sidebar-checked' : ''}
+                            className={activeLink === '/vehicleAdmin' ? 'sidebar-checked' : ''}
                         >
                             <li className='sidebar-list-item'>Vehicle</li>
                         </Link>
                         
                         <Link to='/driverError'
-                            onClick={() => handleChangePage('/driverError')}
                             className={activeLink === '/driverError' ? 'sidebar-checked' : ''}
                         >
-                            <li className='sidebar-list-item'>Driver Violation</li>
+                            <li className='sidebar-list-item'>Violation</li>
                         </Link>
 
                     </ul>

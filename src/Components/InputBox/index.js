@@ -2,11 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './InputBox.css';
 
-const InputBox = ({ label, type, fullWidth, error, disabled, ...rest }) => {
+const InputBox = ({ label, type = "text", value, onChange, fullWidth = false, error = false, disabled = false, ...rest }) => {
+  const handleChange = (e) => {
+    if (onChange) {
+      onChange(e.target.value); // Call parent onChange with the value
+    }
+  };
 
   return (
     <div className="input-container">
       <input
+        value={value}
+        onChange={handleChange}
         placeholder={label}
         className="input-field"
         type={type}
@@ -25,14 +32,6 @@ InputBox.propTypes = {
   fullWidth: PropTypes.bool,
   error: PropTypes.bool,
   disabled: PropTypes.bool,
-};
-
-// Default props
-InputBox.defaultProps = {
-  type: "text",
-  fullWidth: false,
-  error: false,
-  disabled: false,
 };
 
 export default InputBox;

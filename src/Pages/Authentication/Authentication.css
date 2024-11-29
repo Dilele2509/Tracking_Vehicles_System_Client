@@ -43,6 +43,7 @@
 }
 
 .form-title {
+    color: var(--primary-gray);
     text-align: center;
     font-size: 2rem;
     margin-bottom: 1rem;
@@ -250,6 +251,7 @@
 }
 
 .box-element p {
+    color: var(--primary-gray);
     text-align: center;
     width: 80%;
     margin: 0 20px;

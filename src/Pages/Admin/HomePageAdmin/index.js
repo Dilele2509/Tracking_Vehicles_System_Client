@@ -1,31 +1,63 @@
 // import React from 'react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './HomePageAdmin.css';
 import { FaUsers, FaCube, FaClipboardList, FaPowerOff } from 'react-icons/fa';
 import { IoAdd } from 'react-icons/io5';
+import axios from '../../../api/axios';
+const BASEURL = 'http://localhost:3001'
+
 
 function HomePage() {
-
   // Define state variables
-  const [userLength, setUserLength] = useState(0);
-  const [proLength, setProLength] = useState(0);
-  const [orderLength, setOrderLength] = useState(0);
-  const [userList, setUserList] = useState([
-    {
-      user_id: 1,
-      full_name: 'Vy Le',
-      email: 'vyle2509@gmail.com',
-      phone_num: '0966480829',
-      address: '68 Lý Tự Trọng',
-      deleted: 0,
-      role_id: 1,
-      avatar: require('../../../assets/avatar/images.jpg'),
-    },
-
-  ]);
+  const [driverLength, setDriverLength] = useState(0);
+  const [tripLength, setTripLength] = useState(0);
+  const [vehicleLength, setVehicleLength] = useState(0);
+  const [userList, setUserList] = useState([]);
   const [editingUserId, setEditingUserId] = useState(null);
-  const [userData, setUserData] = useState({ full_name: '', email: '', phone_num: '', address: '' });
+  const [userData, setUserData] = useState({ fullname: '', email: '', phone_number: '', birthday: '' });
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  useEffect(() => {
+    try {
+      axios.get('/user/get-all-admin')
+        .then(response => {
+          if (Array.isArray(response.data)) {
+            // console.log(response.data);
+            setUserList(response.data);
+          } else {
+            console.error("Unexpected data format:", response.data);
+          }
+        });
+
+      axios.get('/vehicles/get-all')
+        .then(response => {
+          if (Array.isArray(response.data)) {
+            // console.log(response.data);
+            setVehicleLength(response.data.length);
+          } else {
+            console.error("Unexpected data format:", response.data);
+          }
+        });
+
+      axios.get('/trip/get-all')
+        .then(response => {
+          if (Array.isArray(response.data)) {
+            console.log(response.data);
+            setTripLength(response.data.length);
+          } else {
+            console.error("Unexpected data format:", response.data);
+          }
+        });
+
+      axios.get('/user/get-all')
+        .then(response => {
+          // console.log(response.data);
+          setDriverLength(response.data.length)
+        })
+    } catch (error) {
+      console.error(error);
+    }
+  }, [])
 
   // Define functions
   const handleInputChange = (e) => {
@@ -43,7 +75,7 @@ function HomePage() {
 
   const handleEditClick = (userId, user) => {
     setEditingUserId(userId);
-    setUserData({ full_name: user.full_name, email: user.email, phone_num: user.phone_num, address: user.address });
+    setUserData({ fullname: user.fullname, email: user.email, phone_number: user.phone_number, birthday: user.birthday });
   };
 
   const handleToggleUserStatus = (id, user) => {
@@ -59,7 +91,7 @@ function HomePage() {
     setUserData((prevData) => ({ ...prevData, [id]: value }));
   };
 
-  
+
   const handleAddClick = () => {
     // Add admin logic here
   };
@@ -74,29 +106,29 @@ function HomePage() {
           <div className="dashboard-col-3">
             <div className="dashboard-item">
               <div className='user-list-title'>
-                <h3>Users</h3>
+                <h3>Drivers</h3>
               </div>
               <div className='user-list-content dashboard-admin-content'>
                 <FaUsers />
-                <span>{userLength}</span>
+                <span>{driverLength}</span>
               </div>
             </div>
             <div className="dashboard-item">
               <div className='user-list-title'>
-                <h3>Products</h3>
+                <h3>Trips</h3>
               </div>
               <div className='user-list-content dashboard-admin-content'>
                 <FaCube />
-                <span>{proLength}</span>
+                <span>{tripLength}</span>
               </div>
             </div>
             <div className="dashboard-item">
               <div className='user-list-title'>
-                <h3>Orders</h3>
+                <h3>Vehicles</h3>
               </div>
               <div className='user-list-content dashboard-admin-content'>
                 <FaClipboardList />
-                <span>{orderLength}</span>
+                <span>{vehicleLength}</span>
               </div>
             </div>
           </div>
@@ -119,7 +151,7 @@ function HomePage() {
                       <th>ID</th>
                       <th>Admin</th>
                       <th>Phone Number</th>
-                      <th>Address</th>
+                      <th>birthday</th>
                       <th>Status</th>
                       <th></th>
                       <th></th>
@@ -127,25 +159,26 @@ function HomePage() {
                   </thead>
                   <tbody>
                     {/* Map over user list then display them */}
-                    {userList.map((user) => (
-                      user.role_id === 1 ? (
-                        <tr key={user.user_id}>
+                    {userList.length > 0 ? (userList.map((user, index) => {
+                      console.log(user);
+                      return (
+                        <tr key={index}>
                           <td>
-                            <span>{user.user_id}</span>
+                            <span>{user.id}</span>
                           </td>
                           <td>
                             <div className='td-contain-info'>
                               <div className='user-img-list'>
-                                <img src={user.avatar} alt='user-img' />
+                                <img src={`${BASEURL}${user.avatar}`} alt='user-img' />
                               </div>
                               <div className='user-info-list'>
-                                {editingUserId === user.user_id ? (
+                                {editingUserId === user.id ? (
                                   // Nếu đang chỉnh sửa, hiển thị các input để nhập thông tin mới
                                   <>
                                     <input
                                       type='text'
-                                      value={userData.full_name}
-                                      id='full_name'
+                                      value={userData.fullname}
+                                      id='fullname'
                                       onChange={handleInputChange}
                                     /><br />
                                     <input
@@ -158,7 +191,7 @@ function HomePage() {
                                 ) : (
                                   // Nếu không phải đang chỉnh sửa, hiển thị thông tin người dùng
                                   <>
-                                    <h4>{user.full_name}</h4>
+                                    <h4>{user.fullname}</h4>
                                     <span>{user.email}</span>
                                   </>
                                 )}
@@ -166,40 +199,40 @@ function HomePage() {
                             </div>
                           </td>
                           <td>
-                            {editingUserId === user.user_id ? (
+                            {editingUserId === user.id ? (
                               <>
                                 <input
                                   type='text'
-                                  value={userData.phone_num}
-                                  id='phone_num'
+                                  value={userData.phone_number}
+                                  id='phone_number'
                                   onChange={handleInputChange} />
                               </>
                             ) : (
                               <>
-                                <span>{user.phone_num}</span>
+                                <span>{user.phone_number}</span>
                               </>
                             )}
                           </td>
                           <td>
-                            {editingUserId === user.user_id ? (
+                            {editingUserId === user.id ? (
                               <>
                                 <input
                                   type='text'
-                                  value={userData.address}
-                                  id='address'
+                                  value={userData.birthday}
+                                  id='birthday'
                                   onChange={handleInputChange} />
                               </>
                             ) : (
                               <>
-                                <span>{user.address}</span>
+                                <span>{user.birthday}</span>
                               </>
                             )}
                           </td>
                           <td>
-                            <span>{user.deleted}</span>
+                            <span>{parseInt(String.fromCharCode(user.deleted), 10)}</span>
                           </td>
                           <td>
-                            {editingUserId === user.user_id ? (
+                            {editingUserId === user.id ? (
                               // Nếu đang chỉnh sửa, hiển thị nút "Save" và "Cancel"
                               <>
                                 <button className='edit-list-btn save-list-btn' onClick={handleSaveClick}>Save</button>
@@ -207,7 +240,7 @@ function HomePage() {
                               </>
                             ) : (
                               // Nếu không phải đang chỉnh sửa, hiển thị nút "Edit"
-                              <button className='edit-list-btn' onClick={() => handleEditClick(user.user_id, user)}>Edit</button>
+                              <button className='edit-list-btn' onClick={() => handleEditClick(user.id, user)}>Edit</button>
                             )}
                           </td>
                           <td>
@@ -218,9 +251,8 @@ function HomePage() {
                               <FaPowerOff />
                             </div>
                           </td>
-                        </tr>
-                      ) : null
-                    ))}
+                        </tr>);
+                    })) : (<p>No users found</p>)}
                   </tbody>
                 </table>
               </div>
@@ -239,7 +271,7 @@ function HomePage() {
               <input
                 type='text'
                 placeholder='Admin full name'
-                id='full_name'
+                id='fullname'
                 onChange={handleAddChange}
               />
               <input
@@ -256,14 +288,14 @@ function HomePage() {
               />
               <input
                 type='text'
-                placeholder='Address'
-                id='address'
+                placeholder='birthday'
+                id='birthday'
                 onChange={handleAddChange}
               />
               <input
                 type='text'
                 placeholder='Phone number'
-                id='phone_num'
+                id='phone_number'
                 onChange={handleAddChange}
               />
             </div>

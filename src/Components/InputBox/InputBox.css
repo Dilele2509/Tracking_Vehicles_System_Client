@@ -8,6 +8,7 @@
 
 /* Input field */
 .input-field {
+    color: var(--primary-gray);
     display: block;
     width: 100%;
     padding: 10px;

@@ -6,100 +6,82 @@ import { MdOutlineFileUpload } from "react-icons/md";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import axios from '../../../api/axios';
 
 
 function VehicleAdmin() {
-  const [productImg, setProductImg] = useState('public/assets/images/default_pro_img.jpeg');
+  const [vehicleImg, setVehicleImg] = useState('/assets/Images/car.png');
   const GGMap_API = process.env.GGMap_API
   const [isModalVisible, setModalVisible] = useState(false);
   const [mapVisible, setMapVisible] = useState(false);
   const [currentLocation, setCurrentLocation] = useState(null);
   const [editingVehicleId, setEditingVehicleId] = useState(null);
   const [vehicleData, setVehicleData] = useState({
-    vehicle_ID: '',
-    user_ID: '',
+    id: '',
+    user_id: '',
     user_name: '',
     vehicle_brand: '',
     license_plate: '',
     vehicle_line: '',
     location: '',
     parked_time: '',
-    KM_per_day: '',
+    km_per_day: '',
     deleted: '',
   });
 
-  const [vehicleList, setVehicleList] = useState([
-    {
-      vehicle_ID: 'VEH001',
-      user_ID: 'U001',
-      user_name: 'John Doe',
-      vehicle_brand: 'Toyota',
-      license_plate: 'ABC-1234',
-      vehicle_line: 'Corolla',
-      location: { lat: 10.762622, lng: 106.660172 },
-      parked_time: '10:00 AM',
-      KM_per_day: 50,
-      deleted: 0,
-    },
-    {
-      vehicle_ID: 'VEH002',
-      user_ID: 'U002',
-      user_name: 'Jane Smith',
-      vehicle_brand: 'Honda',
-      license_plate: 'XYZ-5678',
-      vehicle_line: 'Civic',
-      location: { lat: 10.762622, lng: 106.660172 },
-      parked_time: '11:00 AM',
-      KM_per_day: 30,
-      deleted: 0,
-    },
-    {
-      vehicle_ID: 'VEH003',
-      user_ID: 'U003',
-      user_name: 'Alice Johnson',
-      vehicle_brand: 'Ford',
-      license_plate: 'LMN-9101',
-      vehicle_line: 'Focus',
-      location: { lat: 10.762622, lng: 106.660172 },
-      parked_time: '12:00 PM',
-      KM_per_day: 40,
-      deleted: 0,
-    },
-    {
-      vehicle_ID: 'VEH004',
-      user_ID: 'U004',
-      user_name: 'Bob Brown',
-      vehicle_brand: 'Chevrolet',
-      license_plate: 'OPQ-2345',
-      vehicle_line: 'Malibu',
-      location: { lat: 10.762622, lng: 106.660172 },
-      parked_time: '1:00 PM',
-      KM_per_day: 20,
-      deleted: 0,
-    },
-    {
-      vehicle_ID: 'VEH005',
-      user_ID: 'U005',
-      user_name: 'Charlie Davis',
-      vehicle_brand: 'Nissan',
-      license_plate: 'RST-6789',
-      vehicle_line: 'Altima',
-      location: { lat: 10.762622, lng: 106.660172 },
-      parked_time: '2:00 PM',
-      KM_per_day: 25,
-      deleted: 0,
-    },
-  ]);
+  const [vehicleList, setVehicleList] = useState([]);
 
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    },
+    withCredentials: true
+  }
 
-  const handleLocateClick = (location) => {
-    setCurrentLocation(location);
-    setMapVisible(true);
-    const { lat, lng } = location;
-    setLatitude(lat);
-    setLongitude(lng);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        //Fetch all vehicles
+        const vehicleResponse = await axios.get('/vehicles/get-all', config);
+        const vehicles = vehicleResponse.data;
+
+        //Fetch device data for each vehicle
+        const mergedDataPromises = vehicles.map(async (vehicle) => {
+          const deviceResponse = await axios.post('/device/get-latest', {
+            device_id: vehicle.device_id,
+          });
+          const deviceData = deviceResponse.data;
+
+          // Combine data, ensuring vehicle id is preserved
+          const { id: deviceId, ...restDeviceData } = deviceData; // Rename device id if needed
+          return { id: vehicle.id, ...vehicle, ...restDeviceData }; // Use vehicle.id
+        });
+
+        //Wait for all promises to resolve
+        const mergedData = await Promise.all(mergedDataPromises);
+
+        // Update state
+        setVehicleList(mergedData);
+        console.log('Merged List:', mergedData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleLocateClick = async (latitude, longitude) => {
+    try {
+      setCurrentLocation({ latitude: latitude, longitude: longitude });
+      setMapVisible(true);
+      setLatitude(latitude);
+      setLongitude(longitude);
+    } catch (error) {
+      console.error('Error fetching location:', error);
+    }
   };
 
   const handleCloseMap = () => {
@@ -123,14 +105,40 @@ function VehicleAdmin() {
     setEditingVehicleId(null);
   };
 
-  const handleEditClick = (vehicle_ID, vehicle) => {
-    setEditingVehicleId(vehicle_ID);
+  const handleEditClick = (id, vehicle) => {
+    setEditingVehicleId(id);
     setVehicleData(vehicle);
   };
 
-  const handleToggleProStatus = (vehicle_ID, vehicle) => {
-
-  };
+  const handleToggleProStatus = async (id, vehicle) => {
+    try {
+      if (vehicle.deleted === 0) {
+        await axios.put('/vehicles/disable', { id });
+      } else {
+        await axios.put('/vehicles/enable', { id });
+      }
+  
+      // Reload the vehicle list after toggling status
+      const vehicleResponse = await axios.get('/vehicles/get-all', config);
+      const vehicles = vehicleResponse.data;
+  
+      const mergedDataPromises = vehicles.map(async (vehicle) => {
+        const deviceResponse = await axios.post('/device/get-latest', {
+          device_id: vehicle.device_id,
+        });
+        const deviceData = deviceResponse.data;
+  
+        return { id: vehicle.id, ...vehicle, ...deviceData };
+      });
+  
+      const mergedData = await Promise.all(mergedDataPromises);
+      setVehicleList(mergedData);
+  
+      console.log('Vehicle status updated and list reloaded.');
+    } catch (error) {
+      console.error('Error toggling status or refreshing data:', error);
+    }
+  }; 
 
   const handleAddChange = (e) => {
     const { id, value } = e.target;
@@ -176,14 +184,17 @@ function VehicleAdmin() {
                   <thead>
                     <tr>
                       <th>Vehicle ID</th>
-                      <th>User ID</th>
-                      <th>User Name</th>
+                      <th>GPS Device ID</th>
+                      <th>Driver ID</th>
+                      {/* <th>User Name</th> */}
                       <th>Brand</th>
                       <th>License Plate</th>
                       <th>Line</th>
                       <th>Location</th>
+                      <th>Speed (Km/h)</th>
                       <th>Parked Time</th>
                       <th>KM/Day</th>
+                      <th>Update At</th>
                       <th>Status</th>
                       <th></th>
                       <th></th>
@@ -191,9 +202,9 @@ function VehicleAdmin() {
                   </thead>
                   <tbody>
                     {vehicleList.map((vehicle) => (
-                      <tr key={vehicle.vehicle_ID}>
-                        {/* <td>{vehicle.vehicle_ID}</td>
-                        <td>{vehicle.user_ID}</td>
+                      <tr key={vehicle.id}>
+                        {/* <td>{vehicle.id}</td>
+                        <td>{vehicle.user_id}</td>
                         <td>{vehicle.user_name}</td>
                         <td>{vehicle.vehicle_brand}</td>
                         <td>{vehicle.license_plate}</td>
@@ -203,42 +214,62 @@ function VehicleAdmin() {
                           <button onClick={() => handleLocateClick(vehicle.location)}>Locate</button>
                         </td>
                         <td>{vehicle.parked_time}</td>
-                        <td>{vehicle.KM_per_day}</td>
+                        <td>{vehicle.km_per_day}</td>
                         <td>{vehicle.status}</td> */}
                         <td className='info-long-text'>
                           <div className='td-contain-info'>
                             <div className='user-info-list'>
-                              {editingVehicleId === vehicle.vehicle_ID ? (
+                              {editingVehicleId === vehicle.id ? (
                                 <>
                                   <input
                                     type='text'
-                                    value={vehicleData.vehicle_ID}
+                                    value={vehicleData.id}
                                     id='title'
                                     onChange={handleInputChange}
                                   /><br />
                                 </>
                               ) : (
                                 <>
-                                  <span>{vehicle.vehicle_ID}</span>
+                                  <span>{vehicle.id}</span>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                        <td className='info-long-text'>
+                          <div className='td-contain-info'>
+                            <div className='user-info-list'>
+                              {editingVehicleId === vehicle.id ? (
+                                <>
+                                  <input
+                                    type='text'
+                                    value={vehicleData.device_id}
+                                    id='title'
+                                    onChange={handleInputChange}
+                                  /><br />
+                                </>
+                              ) : (
+                                <>
+                                  <span>{vehicle.device_id}</span>
                                 </>
                               )}
                             </div>
                           </div>
                         </td>
                         <td className='long-text-container'>
-                          {editingVehicleId === vehicle.vehicle_ID ? (
+                          {editingVehicleId === vehicle.id ? (
                             <input
                               type='text'
-                              value={vehicleData.user_ID}
-                              id='user_ID'
+                              value={vehicleData.user_id}
+                              id='user_id'
                               onChange={handleInputChange}
                             />
                           ) : (
-                            <span>{vehicle.user_ID}</span>
+                            <span>{vehicle.user_id}</span>
                           )}
                         </td>
-                        <td className='long-text-container'>
-                          {editingVehicleId === vehicle.vehicle_ID ? (
+                        {/* <td className='long-text-container'>
+                          {editingVehicleId === vehicle.id ? (
                             <input
                               type='text'
                               value={vehicleData.user_name}
@@ -248,9 +279,9 @@ function VehicleAdmin() {
                           ) : (
                             <span>{vehicle.user_name}</span>
                           )}
-                        </td>
+                        </td> */}
                         <td className='long-text-container'>
-                          {editingVehicleId === vehicle.vehicle_ID ? (
+                          {editingVehicleId === vehicle.id ? (
                             <input
                               type='text'
                               value={vehicleData.vehicle_brand}
@@ -262,7 +293,7 @@ function VehicleAdmin() {
                           )}
                         </td>
                         <td>
-                          {editingVehicleId === vehicle.vehicle_ID ? (
+                          {editingVehicleId === vehicle.id ? (
                             <input
                               type='text'
                               value={vehicleData.license_plate}
@@ -274,7 +305,7 @@ function VehicleAdmin() {
                           )}
                         </td>
                         <td>
-                          {editingVehicleId === vehicle.vehicle_ID ? (
+                          {editingVehicleId === vehicle.id ? (
                             <input
                               type='text'
                               value={vehicleData.vehicle_line}
@@ -287,64 +318,43 @@ function VehicleAdmin() {
                         </td>
 
                         <td>
-                          {editingVehicleId === vehicle.vehicle_ID ? (
-                            <input
-                              type='text'
-                              value={vehicleData.location}
-                              id='location'
-                              onChange={handleInputChange}
-                            />
-                          ) : (
-                            <td>
-                              <button className='current-location-btn' onClick={() => handleLocateClick(vehicle.location)}>Current Location</button>
-                            </td>
-                          )}
+                          <button className='current-location-btn' onClick={() => handleLocateClick(vehicle.latitude, vehicle.longitude)}>Current Location</button>
                         </td>
 
-                        <td>
-                          {editingVehicleId === vehicle.vehicle_ID ? (
-                            <input
-                              type='text'
-                              value={vehicleData.parked_time}
-                              id='parked_time'
-                              onChange={handleInputChange}
-                            />
-                          ) : (
-                            <span>{vehicle.parked_time}</span>
-                          )}
+                        <td style={{ textAlign: 'center' }}>
+                          <span>{vehicle.speed}</span>
                         </td>
 
-                        <td>
-                          {editingVehicleId === vehicle.vehicle_ID ? (
-                            <input
-                              type='text'
-                              value={vehicleData.KM_per_day}
-                              id='KM_per_day'
-                              onChange={handleInputChange}
-                            />
-                          ) : (
-                            <span>{vehicle.KM_per_day}</span>
-                          )}
+                        <td style={{ textAlign: 'center' }}>
+                          <span>{vehicle.parked_time}</span>
                         </td>
 
-                        <td>
+                        <td style={{ textAlign: 'center' }}>
+                          <span>{vehicle.km_per_day}</span>
+                        </td>
+
+                        <td style={{ textAlign: 'center' }}>
+                          <span>{vehicle.date}  {vehicle.time}</span>
+                        </td>
+
+                        <td style={{ textAlign: 'center' }}>
                           <span>{vehicle.deleted}</span>
                         </td>
 
                         <td>
-                          {editingVehicleId === vehicle.vehicle_ID ? (
+                          {editingVehicleId === vehicle.id ? (
                             <>
                               <button className='edit-list-btn save-list-btn' onClick={handleSaveClick}>Save</button>
                               <button className='edit-list-btn cancel-list-btn' onClick={handleCancelClick}>Cancel</button>
                             </>
                           ) : (
-                            <button className='edit-list-btn' onClick={() => handleEditClick(vehicle.vehicle_ID, vehicle)}>Edit</button>
+                            <button className='edit-list-btn' onClick={() => handleEditClick(vehicle.id, vehicle)}>Edit</button>
                           )}
                         </td>
                         <td>
                           <div
                             className={`switch-icon ${vehicle.deleted === 1 ? 'disable-check' : ''}`}
-                            onClick={() => handleToggleProStatus(vehicle.vehicle_ID, vehicle)}
+                            onClick={() => handleToggleProStatus(vehicle.id, vehicle)}
                           >
                             <FaPowerOff />
                           </div>
@@ -369,7 +379,7 @@ function VehicleAdmin() {
             <MapContainer
               center={[latitude, longitude]}
               zoom={15}
-              style={{ height: "400px", width: "100%" }}
+              style={{ height: "600px", width: "100%" }}
             >
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -401,7 +411,7 @@ function VehicleAdmin() {
             <div className='modal-input-area'>
               <div className='upload-product-img change-ava-area'>
                 <div className='default-img'>
-                  <img src={productImg} alt='default-product-img' />
+                  <img src={vehicleImg} alt='default-vehicle-img' />
                 </div>
                 <div className='upload-file-container'>
                   <label htmlFor='file-upload'>Input File <MdOutlineFileUpload className='upload-icon' /></label>
@@ -415,7 +425,7 @@ function VehicleAdmin() {
                 onChange={handleAddChange}
               />
               <select
-                value={vehicleData.vehicle_ID !== null ? vehicleData.vehicle_ID : 'null'}
+                value={vehicleData.id !== null ? vehicleData.id : 'null'}
                 onChange={(e) => {
                   handleCatChange(e);
                   handleInputChange(e);

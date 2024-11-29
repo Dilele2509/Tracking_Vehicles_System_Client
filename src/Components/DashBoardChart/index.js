@@ -337,7 +337,17 @@ const Alerts = () => {
       time: '2 hours ago',
       icon: <MapPin className="h-5 w-5" />,
       color: 'blue'
-    }
+    },
+    { 
+      id: 5, 
+      type: 'speed', 
+      driver: 'Vy Le', 
+      message: 'Exceeded speed limit on Main Street',
+      severity: 'high',
+      time: '1 mins ago',
+      icon: <AlertTriangle className="h-5 w-5" />,
+      color: 'red'
+    },
   ];
 
   const getSeverityStyles = (severity) => {
@@ -358,7 +368,7 @@ const Alerts = () => {
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-2">
           <Bell className="h-6 w-6 text-indigo-500" />
-          <h2 className="text-xl font-semibold text-gray-800">System Alerts</h2>
+          <h2 className="text-xl font-semibold text-gray-800">Violation Alerts</h2>
         </div>
         <span className="px-3 py-1 bg-indigo-100 text-indigo-600 rounded-full text-sm font-medium">
           {alerts.length} Active Alerts

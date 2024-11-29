@@ -39,7 +39,7 @@ header {
     display: none;
     position: absolute;
     top: 100%;
-    background-color: var(--primary-light-brown);
+    background-color: var(--primary-yellow);
     min-width: 160px;
     z-index: 9999;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -103,7 +103,7 @@ header {
 
 .pre-search-btn:hover,
 .iconHeader:hover {
-    color: var(--primary-light-brown);
+    color: var(--primary-yellow);
     cursor: pointer;
 }
 
