@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-
 import { MdOutlineFileUpload } from "react-icons/md";
-
 import './AdminProfile.css'
+import axios from '../../../api/axios';
+const BASEURL = 'http://localhost:3001'
 
 
 function AdminProfile() {
@@ -16,14 +16,7 @@ function AdminProfile() {
     const [userAva, setUserAva] = useState('https://example.com/path/to/avatar.jpg');
     const [uploadAvailable, setUploadAvailable] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
-    const [adminInfo, setAdminInfo] = useState({
-        full_name: 'Vy Le',
-        email: 'vyle2509@gmail.com',
-        phone_num: '0966480829',
-        address: '68 Lý Tự Trọng (đường 1 chiều)',
-        gender: 'Female',
-        user_id: 1
-    });
+    const [adminInfo, setAdminInfo] = useState({});
     const [editStatus, setEditStatus] = useState(false)
     const [changePass, setChangePass] = useState(false)
     const [currentPass, setCurrentPass] = useState('');
@@ -33,7 +26,18 @@ function AdminProfile() {
     const [notiOption, setNotiOptione] = useState('')
     const [notiContent, setNotiContent] = useState()
 
-   
+    useEffect(() => {
+        axios.get('/user/get-info', config)
+            .then(response => {
+                setAdminInfo(response.data)
+                setUserAva(response.data.avatar)
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }, [])
+
+
     const handleChangeInfo = () => {
         setEditStatus(true)
     }
@@ -57,7 +61,7 @@ function AdminProfile() {
     const handleCancelPass = () => {
         setChangePass(false)
     }
-    
+
     const handleCancelModal = () => {
         setModalVisible(false);
     }
@@ -99,10 +103,6 @@ function AdminProfile() {
     const fileUploadHandler = async () => {
     };
 
-
-
-
-
     const handleCancelUpload = () => {
         setUploadAvailable(false)
     }
@@ -112,27 +112,29 @@ function AdminProfile() {
                 <div className='admin-list-item'>
                     <div className='user-list-header'>
                         <div className='user-list-title'>
-                            <h3>{adminInfo.full_name}'s Profile</h3>
+                            <h3>{adminInfo.fullname}'s Profile</h3>
                         </div>
                     </div>
                     <div className='user-list-content admin-profile-content'>
                         <div className='admin-avatar-area'>
-                            <img src={userAva} alt='admin-avatar' />
-                            <div className='change-user-ava'>
-                                {uploadAvailable ? (
-                                    <>
-                                        <div className='change-ava-area'>
-                                            <div className='upload-file-container'>
-                                                <label htmlFor='file-upload'>Input File <MdOutlineFileUpload className='upload-icon' /></label>
-                                                <input id='file-upload' type="file" accept=".png, .jpg, .jpeg" onChange={fileSelectedHandler} />
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', rowGap: '1rem', width: '50%' }}>
+                                <img src={`${BASEURL}${userAva}`} alt='admin-avatar' />
+                                <div className='change-user-ava'>
+                                    {uploadAvailable ? (
+                                        <>
+                                            <div className='change-ava-area'>
+                                                <div className='upload-file-container'>
+                                                    <label htmlFor='file-upload'>Input File <MdOutlineFileUpload className='upload-icon' /></label>
+                                                    <input id='file-upload' type="file" accept=".png, .jpg, .jpeg" onChange={fileSelectedHandler} />
+                                                </div>
+                                                <button className='change-ava-btn' onClick={fileUploadHandler}>Upload</button>
+                                                <button className='change-ava-btn cancel-mod' onClick={handleCancelUpload}>Cancel</button>
                                             </div>
-                                            <button className='change-ava-btn' onClick={fileUploadHandler}>Upload</button>
-                                            <button className='change-ava-btn cancel-mod' onClick={handleCancelUpload}>Cancel</button>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <button className='change-ava-btn' onClick={handleUploadStatus}>Change</button>
-                                )}
+                                        </>
+                                    ) : (
+                                        <button className='change-ava-btn' onClick={handleUploadStatus}>Change</button>
+                                    )}
+                                </div>
                             </div>
                             <div className='admin-security-area'>
                                 <div className='admin-security-header'>
@@ -202,7 +204,7 @@ function AdminProfile() {
                         </div>
                         <div className='admin-profile-info'>
                             <div className='admin-info-welcome'>
-                                <h3>Hi, {adminInfo.full_name}!</h3>
+                                <h3>Hi, {adminInfo.fullname}!</h3>
                                 <p>This is admin profile page, you can change your information or your security here</p>
                             </div>
                             <div className='admin-info-form'>
@@ -224,11 +226,10 @@ function AdminProfile() {
                                     </div>
                                 </div>
                                 <div className='admin-info-area'>
-                                    <span>Name: {adminInfo.full_name}</span>
+                                    <span>Name: {adminInfo.fullname}</span>
                                     <span>Email: {adminInfo.email}</span>
-                                    <span>Phone: {adminInfo.phone_num}</span>
-                                    <span>Address: {adminInfo.address}</span>
-                                    <span>Gender: {adminInfo.gender}</span>
+                                    <span>Phone: {adminInfo.phone_number}</span>
+                                    <span>Birthday: {adminInfo.birthday}</span>
                                 </div>
                             </div>
                         </div>

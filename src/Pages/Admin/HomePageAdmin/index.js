@@ -16,48 +16,44 @@ function HomePage() {
   const [editingUserId, setEditingUserId] = useState(null);
   const [userData, setUserData] = useState({ fullname: '', email: '', phone_number: '', birthday: '' });
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    },
+    withCredentials: true
+  }
 
   useEffect(() => {
-    try {
-      axios.get('/user/get-all-admin')
-        .then(response => {
-          if (Array.isArray(response.data)) {
-            // console.log(response.data);
-            setUserList(response.data);
-          } else {
-            console.error("Unexpected data format:", response.data);
-          }
-        });
+    const fetchData = async () => {
+      try {
+        const [admins, vehicles, trips, users] = await Promise.all([
+          axios.get('/user/get-all'),
+          axios.get('/vehicles/get-all'),
+          axios.get('/trip/get-all'),
+          axios.get('/user/get-all-admin')
+        ]);
+        if (Array.isArray(admins.data)) setDriverLength(admins.data.length);
+        if (Array.isArray(vehicles.data)) setVehicleLength(vehicles.data.length);
+        if (Array.isArray(trips.data)) setTripLength(trips.data.length);
+        if (Array.isArray(users.data)) {
+          const mergedDataPromises = users.data.map(async (user) => {
+            //console.log('user data: ', user);
+            const licenseData = await axios.post('licenses/get-by-id', { userId: user.id })
+            console.log('license: ',licenseData.data);
+            return { id: user.id, ...user, license: licenseData.data };
+          })
 
-      axios.get('/vehicles/get-all')
-        .then(response => {
-          if (Array.isArray(response.data)) {
-            // console.log(response.data);
-            setVehicleLength(response.data.length);
-          } else {
-            console.error("Unexpected data format:", response.data);
-          }
-        });
+          const mergedData = await Promise.all(mergedDataPromises);
+          console.log(mergedData);
+          setUserList(mergedData);
+        };
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
 
-      axios.get('/trip/get-all')
-        .then(response => {
-          if (Array.isArray(response.data)) {
-            console.log(response.data);
-            setTripLength(response.data.length);
-          } else {
-            console.error("Unexpected data format:", response.data);
-          }
-        });
-
-      axios.get('/user/get-all')
-        .then(response => {
-          // console.log(response.data);
-          setDriverLength(response.data.length)
-        })
-    } catch (error) {
-      console.error(error);
-    }
-  }, [])
 
   // Define functions
   const handleInputChange = (e) => {
@@ -66,7 +62,13 @@ function HomePage() {
   };
 
   const handleSaveClick = () => {
-    // Save logic here
+    axios.put('/user/update-info', { userData })
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
 
   const handleCancelClick = () => {
@@ -78,8 +80,34 @@ function HomePage() {
     setUserData({ fullname: user.fullname, email: user.email, phone_number: user.phone_number, birthday: user.birthday });
   };
 
-  const handleToggleUserStatus = (id, user) => {
-    // Toggle user status logic here
+  const handleToggleUserStatus = async (id, user) => {
+    try {
+      if (user.deleted === 0) {
+        await axios.put('/user/disable', { id });
+      } else {
+        await axios.put('/user/enable', { id });
+      }
+
+      // Reload the user list after toggling status
+      const userResponse = await axios.get('/user/get-all', config);
+      const users = userResponse.data;
+
+      const mergedDataPromises = users.map(async (user) => {
+        const deviceResponse = await axios.post('/licenses/get-by-id', {
+          userId: user.id,
+        });
+        const licenseData = deviceResponse.data;
+
+        return { id: user.id, ...user, license: licenseData };
+      });
+
+      const mergedData = await Promise.all(mergedDataPromises);
+      setUserData(mergedData);
+
+      console.log('user status updated and list reloaded.');
+    } catch (error) {
+      console.error('Error toggling status or refreshing data:', error);
+    }
   };
   const handleOpenModal = () => {
     setIsModalVisible(true);
@@ -166,7 +194,7 @@ function HomePage() {
                           <td>
                             <span>{user.id}</span>
                           </td>
-                          <td>
+                          <td style={{ minWidth: '15rem' }}>
                             <div className='td-contain-info'>
                               <div className='user-img-list'>
                                 <img src={`${BASEURL}${user.avatar}`} alt='user-img' />
@@ -229,7 +257,7 @@ function HomePage() {
                             )}
                           </td>
                           <td>
-                            <span>{parseInt(String.fromCharCode(user.deleted), 10)}</span>
+                            <span>{user.deleted}</span>
                           </td>
                           <td>
                             {editingUserId === user.id ? (

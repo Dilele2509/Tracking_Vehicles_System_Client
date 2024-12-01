@@ -10,6 +10,7 @@ function Users() {
   const [userList, setUserList] = useState([]);
   const [editingUserId, setEditingUserId] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isShowLicense, setIsShowLicense] = useState(false);
   const [userData, setUserData] = useState({
     fullname: '',
     birthday: '',
@@ -27,16 +28,25 @@ function Users() {
   }
 
   useEffect(() => {
-    axios.get('user/get-all', config)
-      .then(response => {
-        console.log(response);
-        setUserList(response.data);
-      })
-      .catch(error => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get('/user/get-all');
+        if (Array.isArray(response.data)) {
+          const mergedDataPromises = response.data.map(async (user) => {
+            const licenseData = await axios.post('/licenses/get-by-id', { userId: user.id });
+            return { id: user.id, ...user, license: licenseData.data };
+          });
+          const mergedData = await Promise.all(mergedDataPromises);
+          //console.log('merged data: ', mergedData);
+          setUserList(mergedData);
+        }
+      } catch (error) {
         console.error(error);
-      });
-  }, [])
+      }
+    };
 
+    fetchUsers();
+  }, []);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -168,7 +178,7 @@ function Users() {
                       <td>
                         <span>{user.id}</span>
                       </td>
-                      <td>
+                      <td style={{ minWidth: '18rem' }}>
                         <div className='td-contain-info'>
                           <div className='user-img-list admin-img-list'>
                             <img src={`${BASEURL}${user.avatar}`} alt='user-img' />
@@ -183,18 +193,10 @@ function Users() {
                                   id='fullname'
                                   onChange={handleInputChange}
                                 /><br />
-                                {/* <input
-                                    type='text'
-                                    id='email'
-                                    value={userData.email}
-                                    onChange={handleInputChange}
-                                  /> */}
                               </>
-                            ) : (
-                              // Nếu không phải đang chỉnh sửa, hiển thị thông tin người dùng
-                              <>
-                                <span>{user.fullname}</span>
-                              </>
+                            ) : (<>
+                              <span>{user.fullname}</span>
+                            </>
                             )}
                           </div>
                         </div>
@@ -246,39 +248,18 @@ function Users() {
                         )}
                       </td>
 
-                      {/* <td>
-                        {editingUserId === user.id ? (
-                          <>
-                            <input
-                              type='text'
-                              value={userData.address}
-                              id='address'
-                              onChange={handleInputChange} />
-                          </>
-                        ) : (
-                          <>
-                            <span>{user.address}</span>
-                          </>
-                        )}
-                      </td> */}
-
-                      {/* <td>
-                        {editingUserId === user.id ? (
-                          <>
-                            <input
-                              type='text'
-                              value={userData.driving_license}
-                              id='driving_license'
-                              onChange={handleInputChange} />
-                          </>
-                        ) : (
-                          <>
-                            <img src={user.driving_license} alt='user-img' style={{ width: '50px', borderRadius: '50%' }} />
-                          </>
-                        )}
-                      </td> */}
                       <td>
-                        <span>{parseInt(String.fromCharCode(user.deleted), 10)}</span>
+                        <button
+                          onClick={() => setIsShowLicense(!isShowLicense)}
+                          style={{ width: '8rem', height: '2.5rem' }}
+                          className={'edit-list-btn'}
+                        >
+                          View License
+                        </button>
+                      </td>
+
+                      <td>
+                        <span>{user.deleted}</span>
                       </td>
                       <td>
                         {editingUserId === user.id ? (
@@ -303,6 +284,21 @@ function Users() {
                     </tr>
                   ))}
                 </tbody>
+                // Wrap the modal component in a React Fragment or a div to avoid adjacent JSX elements
+                <React.Fragment>
+                  <div className={`modal-add ${isShowLicense ? 'modal-visible' : 'modal-hidden'}`}>
+                    <div className='modal-container'>
+                      <div className='modal-header'>
+                        <h3>Driver's License</h3>
+                      </div>
+                      <div className='modal-content'>
+                        <div className='cancel-modal-button'>
+                          <button className='submit-modal-btn modal-cancel' onClick={handleCancelModal}>CANCEL</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </React.Fragment>
               </table>
             </div>
           </div>

@@ -64,6 +64,10 @@ tr {
     border-bottom: 1px solid #ddd; /* Add a bottom border for separation */
 }
 
+.user-list-table > tbody > tr > .important-min-width {
+    min-width: 100px !important;
+}
+
 .user-list-title {
     display: inline-block;
     position: relative;
