@@ -39,12 +39,12 @@ function HomePage() {
           const mergedDataPromises = users.data.map(async (user) => {
             //console.log('user data: ', user);
             const licenseData = await axios.post('licenses/get-by-id', { userId: user.id })
-            console.log('license: ',licenseData.data);
+            //console.log('license: ', licenseData.data);
             return { id: user.id, ...user, license: licenseData.data };
           })
 
           const mergedData = await Promise.all(mergedDataPromises);
-          console.log(mergedData);
+          //console.log(mergedData);
           setUserList(mergedData);
         };
       } catch (error) {
@@ -82,6 +82,7 @@ function HomePage() {
 
   const handleToggleUserStatus = async (id, user) => {
     try {
+      // Toggle the user status based on whether they are enabled or disabled
       if (user.deleted === 0) {
         await axios.put('/user/disable', { id });
       } else {
@@ -89,26 +90,16 @@ function HomePage() {
       }
 
       // Reload the user list after toggling status
-      const userResponse = await axios.get('/user/get-all', config);
+      const userResponse = await axios.get('/user/get-all-admin', config);
       const users = userResponse.data;
+      setUserList(users);  // Set the updated user list here
 
-      const mergedDataPromises = users.map(async (user) => {
-        const deviceResponse = await axios.post('/licenses/get-by-id', {
-          userId: user.id,
-        });
-        const licenseData = deviceResponse.data;
-
-        return { id: user.id, ...user, license: licenseData };
-      });
-
-      const mergedData = await Promise.all(mergedDataPromises);
-      setUserData(mergedData);
-
-      console.log('user status updated and list reloaded.');
+      //console.log('User status updated and list reloaded.');
     } catch (error) {
       console.error('Error toggling status or refreshing data:', error);
     }
   };
+
   const handleOpenModal = () => {
     setIsModalVisible(true);
   }

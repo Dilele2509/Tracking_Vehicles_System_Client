@@ -1,0 +1,27 @@
+/* Thêm style cho phần tử chứa biểu đồ */
+.h-80 {
+  height: 320px; /* Tùy chỉnh chiều cao của phần tử */
+}
+
+.overflow-x-auto {
+  overflow-x: auto; /* Cho phép cuộn ngang */
+  overflow-y: hidden; /* Không cho phép cuộn dọc */
+}
+
+/* Thanh cuộn của trình duyệt (tùy chọn) */
+::-webkit-scrollbar {
+  height: 8px; /* Đặt chiều cao thanh cuộn ngang */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #3b82f6; /* Màu của thanh cuộn */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0; /* Màu nền của thanh cuộn */
+}
+
+.displayNone {
+  display: none !important;
+}

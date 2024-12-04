@@ -2,32 +2,41 @@ import React, { useState, useEffect } from 'react';
 import './VehicleAdmin.css'
 import { FaPowerOff } from "react-icons/fa6";
 import { IoAdd } from "react-icons/io5";
-import { MdOutlineFileUpload } from "react-icons/md";
+import { MdOutlineFileUpload, MdCameraAlt } from "react-icons/md";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 import axios from '../../../api/axios';
 
 
 function VehicleAdmin() {
-  const [vehicleImg, setVehicleImg] = useState('/assets/Images/car.png');
-  const GGMap_API = process.env.GGMap_API
+  const notify = (message, type = "info") => {
+    toast(message, { type });
+  };
+  const BASEURL = "http://localhost:3001";
+  const [selectedThumbnail, setSelectedThumbnail] = useState(null);
+  const [modalThumbnail, setModalThumbnail] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
   const [mapVisible, setMapVisible] = useState(false);
   const [currentLocation, setCurrentLocation] = useState(null);
   const [editingVehicleId, setEditingVehicleId] = useState(null);
   const [vehicleData, setVehicleData] = useState({
     id: '',
+    device_id: '',
     user_id: '',
-    user_name: '',
     vehicle_brand: '',
     license_plate: '',
     vehicle_line: '',
-    location: '',
-    parked_time: '',
-    km_per_day: '',
-    deleted: '',
   });
+
+  const [addData, setAddData] = useState({
+    device_id: '',
+    vehicle_brand: '',
+    license_plate: '',
+    vehicle_line: '',
+  })
 
   const [vehicleList, setVehicleList] = useState([]);
 
@@ -74,19 +83,33 @@ function VehicleAdmin() {
   }, []);
 
   const handleLocateClick = async (latitude, longitude) => {
+    if (!latitude || !longitude) {
+      /* alert("Location data is not available for this vehicle."); */
+      notify('Location data is not available for this vehicle', 'warning');
+      return;
+    }
+
     try {
-      setCurrentLocation({ latitude: latitude, longitude: longitude });
+      setCurrentLocation({ latitude, longitude });
       setMapVisible(true);
       setLatitude(latitude);
       setLongitude(longitude);
     } catch (error) {
-      console.error('Error fetching location:', error);
+      console.error("Error fetching location:", error);
     }
   };
 
   const handleCloseMap = () => {
     setMapVisible(false);
   };
+
+  const handleModalFileInput = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setModalThumbnail(file);
+    }
+  };
+
 
   const handleOpenModal = () => {
     setModalVisible(true);
@@ -97,8 +120,79 @@ function VehicleAdmin() {
     setVehicleData((prevData) => ({ ...prevData, [id]: value }));
   };
 
-  const handleSaveClick = () => {
-    // Logic to save the edited product
+  const handleFileInput = (e) => {
+    console.log(e.target.files);
+    const file = e.target.files[0];
+    if (file) setSelectedThumbnail(file);
+  };
+
+  const handleSaveClick = async () => {
+    try {
+      const formData = new FormData();
+
+      // Check if a new thumbnail is selected
+      if (selectedThumbnail) {
+        //console.log(selectedThumbnail, vehicleData.id);
+        formData.append("thumbnail", selectedThumbnail);
+        formData.append("id", vehicleData.id);
+
+        //console.log(formData);
+        // Call the API to upload the new thumbnail
+        const thumbnailResponse = await axios.post(
+          "/vehicles/update-thumbnail",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            },
+            withCredentials: true
+          }
+        );
+
+        //console.log('response: ',thumbnailResponse);
+
+        if (thumbnailResponse.data.status === 200) {
+          notify("Thumbnail updated successfully!", "success");
+
+          // Prepare the data to update vehicle details
+          const updatedVehicleData = {
+            id: vehicleData.id,
+            device_id: vehicleData.device_id,
+            user_id: vehicleData.user_id,
+            vehicle_brand: vehicleData.vehicle_brand,
+            license_plate: vehicleData.license_plate,
+            vehicle_line: vehicleData.vehicle_line,
+          };
+
+          // Call the API to update vehicle details
+          const vehicleResponse = await axios.put(
+            "/vehicles/update",
+            updatedVehicleData,
+            config
+          );
+
+          console.log(vehicleResponse.data);
+          if (vehicleResponse.data.status === 200) {
+            notify("Vehicle details updated successfully!", "success");
+
+            // Refresh the vehicle list
+            const vehicleListResponse = await axios.get("/vehicles/get-all", config);
+            setVehicleList(vehicleListResponse.data);
+
+            // Exit editing mode
+            setEditingVehicleId(null);
+          } else {
+            throw new Error("Failed to update vehicle details");
+          }
+        } else {
+          notify('Failed to update vehicle details', "error");
+          throw new Error("Failed to update");
+        }
+      }
+    } catch (error) {
+      console.error("Error saving vehicle data:", error);
+      notify("Failed to save vehicle data. Please try again.", "error");
+    }
   };
 
   const handleCancelClick = () => {
@@ -117,43 +211,82 @@ function VehicleAdmin() {
       } else {
         await axios.put('/vehicles/enable', { id });
       }
-  
+
       // Reload the vehicle list after toggling status
       const vehicleResponse = await axios.get('/vehicles/get-all', config);
       const vehicles = vehicleResponse.data;
-  
+
       const mergedDataPromises = vehicles.map(async (vehicle) => {
         const deviceResponse = await axios.post('/device/get-latest', {
           device_id: vehicle.device_id,
         });
         const deviceData = deviceResponse.data;
-  
+
         return { id: vehicle.id, ...vehicle, ...deviceData };
       });
-  
+
       const mergedData = await Promise.all(mergedDataPromises);
       setVehicleList(mergedData);
-  
+
       console.log('Vehicle status updated and list reloaded.');
     } catch (error) {
       console.error('Error toggling status or refreshing data:', error);
     }
-  }; 
+  };
 
   const handleAddChange = (e) => {
     const { id, value } = e.target;
-    setVehicleData((prevData) => ({ ...prevData, [id]: value }));
+    setAddData((prevData) => ({ ...prevData, [id]: value }));
   };
 
-  const handleCatChange = (e) => {
-    // Logic to handle category change
-  };
+  const handleAddClick = async () => {
+    try {
+      const formData = new FormData();
 
-  const handleAddClick = () => {
+      // Add modal-specific thumbnail
+      if (modalThumbnail) {
+        formData.append("thumbnail", modalThumbnail);
+      }
 
+      // Add the additional data as a JSON string
+      formData.append("data", JSON.stringify(addData));
+      console.log('addData', addData);
+      // Send the request to the server
+      const response = await axios.post('/vehicles/add', formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        withCredentials: true
+      });
+
+      // Check response status
+      if (response.data.status === 200) {
+        notify("Vehicle added successfully!", "success");
+
+        // Refresh the vehicle list
+        const vehicleListResponse = await axios.get("/vehicles/get-all", config);
+        setVehicleList(vehicleListResponse.data);
+
+        // Reset the form and close the modal
+        setAddData({
+          device_id: '',
+          vehicle_brand: '',
+          license_plate: '',
+          vehicle_line: '',
+        });
+        setModalThumbnail(null); // Clear modal-specific thumbnail state
+        setModalVisible(false);
+      } else {
+        notify("Failed to add vehicle. Please try again.", "error");
+      }
+    } catch (error) {
+      console.error("Error adding vehicle:", error);
+      notify("Failed to add vehicle. Please check your inputs and try again.", "error");
+    }
   };
 
   const handleCancelModal = () => {
+    setModalThumbnail(null); // Clear modal-specific thumbnail state
     setModalVisible(false);
   };
 
@@ -187,9 +320,10 @@ function VehicleAdmin() {
                       <th>GPS Device ID</th>
                       <th>Driver ID</th>
                       {/* <th>User Name</th> */}
-                      <th>Brand</th>
+                      <th>Image</th>
+                      <th>Vehicle Brand</th>
+                      <th>Vehicle Line</th>
                       <th>License Plate</th>
-                      <th>Line</th>
                       <th>Location</th>
                       <th>Speed (Km/h)</th>
                       <th>Parked Time</th>
@@ -203,36 +337,10 @@ function VehicleAdmin() {
                   <tbody>
                     {vehicleList.map((vehicle) => (
                       <tr key={vehicle.id}>
-                        {/* <td>{vehicle.id}</td>
-                        <td>{vehicle.user_id}</td>
-                        <td>{vehicle.user_name}</td>
-                        <td>{vehicle.vehicle_brand}</td>
-                        <td>{vehicle.license_plate}</td>
-                        <td>{vehicle.vehicle_line}</td>
-                        <td>
-                          {vehicle.location}
-                          <button onClick={() => handleLocateClick(vehicle.location)}>Locate</button>
-                        </td>
-                        <td>{vehicle.parked_time}</td>
-                        <td>{vehicle.km_per_day}</td>
-                        <td>{vehicle.status}</td> */}
                         <td className='info-long-text'>
                           <div className='td-contain-info'>
                             <div className='user-info-list'>
-                              {editingVehicleId === vehicle.id ? (
-                                <>
-                                  <input
-                                    type='text'
-                                    value={vehicleData.id}
-                                    id='title'
-                                    onChange={handleInputChange}
-                                  /><br />
-                                </>
-                              ) : (
-                                <>
-                                  <span>{vehicle.id}</span>
-                                </>
-                              )}
+                              <span>{vehicle.id}</span>
                             </div>
                           </div>
                         </td>
@@ -244,7 +352,7 @@ function VehicleAdmin() {
                                   <input
                                     type='text'
                                     value={vehicleData.device_id}
-                                    id='title'
+                                    id='device_id'
                                     onChange={handleInputChange}
                                   /><br />
                                 </>
@@ -268,18 +376,48 @@ function VehicleAdmin() {
                             <span>{vehicle.user_id}</span>
                           )}
                         </td>
-                        {/* <td className='long-text-container'>
+
+                        <td style={{ minWidth: '10rem' }}>
                           {editingVehicleId === vehicle.id ? (
-                            <input
-                              type='text'
-                              value={vehicleData.user_name}
-                              id='user_name'
-                              onChange={handleInputChange}
-                            />
+                            <div style={{ position: 'relative', textAlign: 'center' }}>
+                              <button
+                                style={{ borderRadius: '5px', overflow: 'hidden', position: 'relative' }}
+                                disabled
+                              >
+                                <img
+                                  className="thumbnail"
+                                  src={selectedThumbnail ? URL.createObjectURL(selectedThumbnail) : `${BASEURL}${vehicle.thumbnail}`}
+                                  alt="Vehicle Thumbnail"
+                                />
+                                <div className="change-photo">
+                                  <MdCameraAlt style={{ color: 'white' }} />
+                                  <p>change photo</p>
+                                </div>
+                              </button>
+                              <input
+                                type="file"
+                                accept=".png, .jpg, .jpeg"
+                                style={{
+                                  position: 'absolute',
+                                  top: 0,
+                                  left: 0,
+                                  width: '100%',
+                                  height: '100%',
+                                  opacity: 0,
+                                  cursor: 'pointer',
+                                }}
+                                onChange={(e) => handleFileInput(e)}
+                              />
+                            </div>
                           ) : (
-                            <span>{vehicle.user_name}</span>
+                            <img
+                              className="thumbnail"
+                              src={`${BASEURL}${vehicle.thumbnail}`}
+                              alt="Vehicle Thumbnail"
+                            />
                           )}
-                        </td> */}
+                        </td>
+
                         <td className='long-text-container'>
                           {editingVehicleId === vehicle.id ? (
                             <input
@@ -292,19 +430,8 @@ function VehicleAdmin() {
                             <span>{vehicle.vehicle_brand}</span>
                           )}
                         </td>
-                        <td>
-                          {editingVehicleId === vehicle.id ? (
-                            <input
-                              type='text'
-                              value={vehicleData.license_plate}
-                              id='license_plate'
-                              onChange={handleInputChange}
-                            />
-                          ) : (
-                            <span>{vehicle.license_plate}</span>
-                          )}
-                        </td>
-                        <td>
+
+                        <td style={{ minWidth: '10rem' }}>
                           {editingVehicleId === vehicle.id ? (
                             <input
                               type='text'
@@ -318,11 +445,24 @@ function VehicleAdmin() {
                         </td>
 
                         <td>
+                          {editingVehicleId === vehicle.id ? (
+                            <input
+                              type='text'
+                              value={vehicleData.license_plate}
+                              id='license_plate'
+                              onChange={handleInputChange}
+                            />
+                          ) : (
+                            <span>{vehicle.license_plate}</span>
+                          )}
+                        </td>
+
+                        <td>
                           <button className='current-location-btn' onClick={() => handleLocateClick(vehicle.latitude, vehicle.longitude)}>Current Location</button>
                         </td>
 
                         <td style={{ textAlign: 'center' }}>
-                          <span>{vehicle.speed}</span>
+                          <span>{vehicle.speed ? vehicle.speed : 'No data yet'}</span>
                         </td>
 
                         <td style={{ textAlign: 'center' }}>
@@ -334,7 +474,7 @@ function VehicleAdmin() {
                         </td>
 
                         <td style={{ textAlign: 'center' }}>
-                          <span>{vehicle.date}  {vehicle.time}</span>
+                          <span>{vehicle.date && vehicle.time ? `${vehicle.date} ${vehicle.time}` : 'No data yet'}</span>
                         </td>
 
                         <td style={{ textAlign: 'center' }}>
@@ -411,50 +551,38 @@ function VehicleAdmin() {
             <div className='modal-input-area'>
               <div className='upload-product-img change-ava-area'>
                 <div className='default-img'>
-                  <img src={vehicleImg} alt='default-vehicle-img' />
+                  <img
+                    src={modalThumbnail ? URL.createObjectURL(modalThumbnail) : `${BASEURL}/public/assets/Images/car.png`}
+                    alt='default-vehicle-img'
+                  />
                 </div>
                 <div className='upload-file-container'>
-                  <label htmlFor='file-upload'>Input File <MdOutlineFileUpload className='upload-icon' /></label>
-                  <input id='thumbnail' type="file" accept=".png, .jpg, .jpeg" onChange={handleAddChange} />
+                  <label htmlFor='modal-file-upload'>Input File <MdOutlineFileUpload className='upload-icon' /></label>
+                  <input id='modal-file-upload' type="file" accept=".png, .jpg, .jpeg" onChange={handleModalFileInput} />
                 </div>
               </div>
               <input
                 type='text'
-                placeholder='Product title'
-                id='title'
-                onChange={handleAddChange}
-              />
-              <select
-                value={vehicleData.id !== null ? vehicleData.id : 'null'}
-                onChange={(e) => {
-                  handleCatChange(e);
-                  handleInputChange(e);
-                }}
-              >
-                <option value='null'>Select Category</option>
-              </select>
-              <input
-                type='text'
-                placeholder='Price'
-                id='price'
+                placeholder='Vehicle Brand'
+                id='vehicle_brand'
                 onChange={handleAddChange}
               />
               <input
                 type='text'
-                placeholder='Description'
-                id='description'
+                placeholder='Vehicle Line'
+                id='vehicle_line'
                 onChange={handleAddChange}
               />
               <input
                 type='text'
-                placeholder='Ingredients'
-                id='ingredients'
+                placeholder='License Plate'
+                id='license_plate'
                 onChange={handleAddChange}
               />
               <input
                 type='text'
-                placeholder='Quantity in stock'
-                id='quantity'
+                placeholder='GPS Device ID'
+                id='device_id'
                 onChange={handleAddChange}
               />
             </div>
@@ -467,6 +595,8 @@ function VehicleAdmin() {
           </div>
         </div>
       </div>
+
+      <ToastContainer />
     </>
   );
 }

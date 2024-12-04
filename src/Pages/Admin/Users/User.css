@@ -54,6 +54,7 @@
 }
 
 .user-list-table > thead > tr > th {
+  text-align: center;
   min-height: 3rem;
   font-size: 1rem;
   color: #444;
@@ -82,13 +83,6 @@
   min-height: 4rem;
   align-items: center;
   overflow-x: auto; /* Enable horizontal scrolling for this container */
-}
-
-
-.user-list-table > thead > tr > th {
-  min-height: 3rem;
-  font-size: 1rem;
-  color: #444;
 }
 
 .user-list-table > tbody > tr > td {

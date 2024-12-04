@@ -32,8 +32,8 @@ export default function Authentication() {
       headers: {
         "Content-Type": "application/json"
       },
-      withCredentials: true 
-    }; 
+      withCredentials: true
+    };
 
     try {
       if (email === '' || password === '') {
@@ -46,22 +46,16 @@ export default function Authentication() {
       if (response.data.status !== 'Error') {
         const userInfo = response.data;
 
-        // Convert deleted value to binary
-        const deleted = parseInt(String.fromCharCode(userInfo.deleted.data[0]), 10);
-        if (deleted !== 1) {
-          if (userInfo.role_id === 'ROLE001') {
-            const response = await axios.get('/login/check-status/', config);
-            const { status } = response.data;
+        if (userInfo.role_id === 'ROLE001') {
+          const response = await axios.get('/login/check-status/', config);
+          const { status } = response.data;
 
-            console.log('login status: ',status);
-            notify("Login successful", "success");
-            window.location.href = '/';
-          } else {
-            console.log('Your account does not have access!');
-            notify("Your account does not have access!", "warning");
-          }
+          console.log('login status: ', status);
+          notify("Login successful", "success");
+          window.location.href = '/';
         } else {
-          notify("Your account has been disabled", "error");
+          console.log('Your account does not have access!');
+          notify("Your account does not have access!", "warning");
         }
       } else {
         notify(response.data.message, "error");

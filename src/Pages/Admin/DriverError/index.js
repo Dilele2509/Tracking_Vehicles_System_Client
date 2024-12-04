@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AlertCircle, Clock, User, ArrowLeft } from 'lucide-react';
+import { AlertCircle, Clock, User, ArrowLeft, InfoIcon } from 'lucide-react';
 import axios from '../../../api/axios';
 
 const BASEURL = 'http://localhost:3001';
@@ -122,6 +122,10 @@ const DriverViolations = () => {
                 <div className="flex items-center gap-2" style={{ color: '#484A40' }}>
                   <Clock className="h-4 w-4" />
                   <span>{violation.date} . {violation.time}</span>
+                </div>
+                <div className="flex items-center gap-2" style={{ color: '#484A40' }}>
+                  <InfoIcon className="h-4 w-4" />
+                  <span>Có hành vi ngủ gật trong lúc điều khiển phương tiện</span>
                 </div>
 
                 <div className="mt-4 p-4 rounded-lg transition-all duration-300 hover:shadow-md"

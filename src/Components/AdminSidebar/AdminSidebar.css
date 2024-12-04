@@ -111,8 +111,12 @@
 
 .sidebar-checked .sidebar-list-item{
     background-color: var(--primary-yellow) !important;
-    color: #333 !important;
+    /* color: #333 !important; */
     
+}
+
+.sidebar-checked .sidebar-list-item li{
+    color: #333 !important;
 }
 
 .admin-sidebar-footer{
@@ -169,3 +173,9 @@
     border-color: red;
 }
 
+.notify{
+    background-color: var(--red);
+    padding: 3px;
+    font-size: 22px;
+    border-radius: 50%;
+}
