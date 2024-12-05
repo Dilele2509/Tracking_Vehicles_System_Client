@@ -124,14 +124,14 @@
     margin-top: 1rem;
 }
 
-.admin-info-area input,
-.admin-info-area select{
+.admin-info-area input{
     width: 80%;
     height: 2rem;
     padding: .5rem;
     border-radius: 10px;
     border: #999 solid 1px;
     margin-bottom: 0.5rem;
+    color: var(--primary-gray);
 }
 
 .admin-info-area span{

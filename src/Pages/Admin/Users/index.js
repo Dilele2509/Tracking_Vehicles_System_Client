@@ -193,7 +193,7 @@ function Users() {
                       onChange={handleAddChange}
                     />
                     <input
-                      type='password'
+                      type='phone'
                       placeholder='Phone Number'
                       id='phone_number'
                       onChange={handleAddChange}

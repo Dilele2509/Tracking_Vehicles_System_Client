@@ -2,18 +2,22 @@ import { useEffect, useState } from 'react';
 import { MdOutlineFileUpload } from "react-icons/md";
 import './AdminProfile.css'
 import axios from '../../../api/axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 const BASEURL = 'http://localhost:3001'
 
 
 function AdminProfile() {
-    const [toasts, setToasts] = useState([]);
+    const notify = (message, type = "info") => {
+        toast(message, { type });
+    };
     const config = {
         headers: {
             "Content-Type": "application/json"
         },
         withCredentials: true
     };
-    const [userAva, setUserAva] = useState('https://example.com/path/to/avatar.jpg');
+    const [userAva, setUserAva] = useState(null);
     const [uploadAvailable, setUploadAvailable] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [adminInfo, setAdminInfo] = useState({});
@@ -25,11 +29,25 @@ function AdminProfile() {
     const [isModalVisible, setModalVisible] = useState(false);
     const [notiOption, setNotiOptione] = useState('')
     const [notiContent, setNotiContent] = useState()
+    const [userData, setUserData] = useState({
+        id: '',
+        fullname: '',
+        birthday: null,
+        email: '',
+        phone_number: '',
+    });
 
     useEffect(() => {
         axios.get('/user/get-info', config)
             .then(response => {
                 setAdminInfo(response.data)
+                setUserData({
+                    id: response.data.id,
+                    fullname: response.data.fullname,
+                    birthday: response.data.birthday,
+                    email: response.data.email,
+                    phone_number: response.data.phone_number,
+                })
                 setUserAva(response.data.avatar)
             })
             .catch(error => {
@@ -37,14 +55,46 @@ function AdminProfile() {
             });
     }, [])
 
+    const handleAddChange = (e) => {
+        const { id, value } = e.target;
+        setUserData((prevData) => ({ ...prevData, [id]: value }));
+    };
+
+    const handleSaveInfoClick = () => {
+        console.log(userData);
+
+        // Sending PUT request to update the user
+        axios.put('/user/update-info', userData, config)
+            .then(() => {
+                notify('update information successfully', 'success');
+                // On success, update the user list with the edited user
+                axios.get('/user/get-info', config)
+                    .then(response => {
+                        setAdminInfo(response.data)
+                        setUserAva(response.data.avatar)
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+
+                // Reset the editing state
+                setEditStatus(false)
+                setUserData({
+                    id: '',
+                    fullname: '',
+                    birthday: null,
+                    email: '',
+                    phone_number: '',
+                });
+            })
+            .catch(error => {
+                notify('error updating user', 'error')
+                console.error(error);
+            });
+    };
 
     const handleChangeInfo = () => {
         setEditStatus(true)
-    }
-
-    const handleSaveClick = (e) => {
-        e.preventDefault();
-        setEditStatus(false);
     }
 
     const handleCancelClick = () => {
@@ -87,20 +137,40 @@ function AdminProfile() {
 
     const fileSelectedHandler = (e) => {
         const file = e.target.files[0];
-        previewFile(file);
         setSelectedFile(file);
 
     };
 
-    const previewFile = (file) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = () => {
-            setUserAva(reader.result);
-        };
-    };
-
     const fileUploadHandler = async () => {
+        try {
+            const formData = new FormData();
+            formData.append('avatar', selectedFile);
+            axios.post('/user/upload-ava/', formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                },
+                withCredentials: true
+            })
+                .then((response) => {
+                    notify('Avatar uploaded successfully', 'success');
+
+                    axios.get('/user/get-info', config)
+                        .then(response => {
+                            setUserAva(response.data.avatar)
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+                    setUploadAvailable(false);
+                    setSelectedFile(null);
+                })
+                .catch((error) => {
+                    console.error('Error uploading file:', error);
+                    notify('Error uploading file: ', 'error')
+                });
+        } catch (err) {
+            console.error('Error:', err);
+        }
     };
 
     const handleCancelUpload = () => {
@@ -118,7 +188,7 @@ function AdminProfile() {
                     <div className='user-list-content admin-profile-content'>
                         <div className='admin-avatar-area'>
                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', rowGap: '1rem', width: '50%' }}>
-                                <img src={`${BASEURL}${userAva}`} alt='admin-avatar' />
+                                <img src={selectedFile ? URL.createObjectURL(selectedFile) : `${BASEURL}${userAva}`} alt='admin-avatar' />
                                 <div className='change-user-ava'>
                                     {uploadAvailable ? (
                                         <>
@@ -127,8 +197,10 @@ function AdminProfile() {
                                                     <label htmlFor='file-upload'>Input File <MdOutlineFileUpload className='upload-icon' /></label>
                                                     <input id='file-upload' type="file" accept=".png, .jpg, .jpeg" onChange={fileSelectedHandler} />
                                                 </div>
-                                                <button className='change-ava-btn' onClick={fileUploadHandler}>Upload</button>
-                                                <button className='change-ava-btn cancel-mod' onClick={handleCancelUpload}>Cancel</button>
+                                                <div style={{ display: 'flex', marginTop: '1rem' }}>
+                                                    <button className='change-ava-btn' onClick={fileUploadHandler}>Upload</button>
+                                                    <button className='change-ava-btn cancel-mod' onClick={handleCancelUpload}>Cancel</button>
+                                                </div>
                                             </div>
                                         </>
                                     ) : (
@@ -214,7 +286,7 @@ function AdminProfile() {
                                         {editStatus ? (
                                             <>
                                                 <div className='admin-submit-btn'>
-                                                    <button className='edit-list-btn save-list-btn' onClick={handleSaveClick}>Save</button>
+                                                    <button className='edit-list-btn save-list-btn' onClick={handleSaveInfoClick}>Save</button>
                                                     <button className='edit-list-btn cancel-list-btn' onClick={handleCancelClick}>Cancel</button>
                                                 </div>
                                             </>
@@ -226,10 +298,43 @@ function AdminProfile() {
                                     </div>
                                 </div>
                                 <div className='admin-info-area'>
-                                    <span>Name: {adminInfo.fullname}</span>
-                                    <span>Email: {adminInfo.email}</span>
-                                    <span>Phone: {adminInfo.phone_number}</span>
-                                    <span>Birthday: {adminInfo.birthday}</span>
+                                    {!editStatus ? (<>
+                                        <span>Name: {adminInfo.fullname}</span>
+                                        <span>Email: {adminInfo.email}</span>
+                                        <span>Phone: {adminInfo.phone_number}</span>
+                                        <span>Birthday: {adminInfo.birthday}</span>
+                                    </>) : (
+                                        <>
+                                            <input
+                                                type='text'
+                                                placeholder='Full name'
+                                                id='fullname'
+                                                value={userData.fullname}
+                                                onChange={handleAddChange}
+                                            />
+                                            <input
+                                                type="date"
+                                                placeholder="Birthday"
+                                                id="birthday"
+                                                value={userData.birthday.split('T')[0]} // Ensures only the date part (yyyy-mm-dd)
+                                                onChange={(e) => handleAddChange({ target: { id: 'birthday', value: e.target.value } })}
+                                            />
+                                            <input
+                                                type='phone'
+                                                placeholder='Phone Number'
+                                                id='phone_number'
+                                                value={userData.phone_number}
+                                                onChange={handleAddChange}
+                                            />
+                                            <input
+                                                type='text'
+                                                placeholder='Email'
+                                                id='email'
+                                                value={userData.email}
+                                                onChange={handleAddChange}
+                                            />
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -257,6 +362,8 @@ function AdminProfile() {
                     </div>
                 </div>
             </div>
+
+            <ToastContainer />
         </>
     );
 }

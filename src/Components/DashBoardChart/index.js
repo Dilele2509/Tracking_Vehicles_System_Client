@@ -495,10 +495,9 @@ const DashBoardChart = () => {
         <div className="lg:col-span-2">
           <Alerts />
         </div>
-        <div className="lg:col-span-2">
-          {/* <FleetStatus /> */}
+        {/* <div className="lg:col-span-2">
           <p className="text-center text-gray-700 text-sm">Copyright © 2024 - owned by HALEE. All Rights Reserved</p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
