@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AlertCircle, Clock, User, ArrowLeft, InfoIcon } from 'lucide-react';
 import axios from '../../../api/axios';
 
-const BASEURL = 'http://localhost:3001';
+const BASEURL = 'http://103.77.209.93:3001';
 
 // Card component
 const Card = ({ children, className = '', onClick }) => (

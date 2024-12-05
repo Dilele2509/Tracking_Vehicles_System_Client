@@ -1,6 +1,6 @@
 import React from 'react';
 import './LicenseCard.css';
-const BASEURL = 'http://localhost:3001'
+const BASEURL = 'http://103.77.209.93:3001'
 
 function LicenseCard({ licenseData, onClose }) {
     return (
