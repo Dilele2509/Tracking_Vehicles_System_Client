@@ -15,7 +15,7 @@ function VehicleAdmin() {
   const notify = (message, type = "info") => {
     toast(message, { type });
   };
-  const BASEURL = "http://localhost:3001";
+  const BASEURL = "http://103.77.209.110:3001";
   const [selectedThumbnail, setSelectedThumbnail] = useState(null);
   const [modalThumbnail, setModalThumbnail] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);

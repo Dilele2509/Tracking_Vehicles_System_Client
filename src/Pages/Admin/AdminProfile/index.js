@@ -4,7 +4,7 @@ import './AdminProfile.css'
 import axios from '../../../api/axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
-const BASEURL = 'http://localhost:3001'
+const BASEURL = 'http://103.77.209.110:3001'
 
 
 function AdminProfile() {

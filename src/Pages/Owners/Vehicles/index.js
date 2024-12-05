@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import axios from '../../../api/axios';
 
 function Vehicles() {
-    const src = 'http://localhost:3001/';
+    const src = 'http://103.77.209.110:3001/';
     const owner_id = 'USER001';
     const [vehicles, getVehicles] = useState([]);
 
