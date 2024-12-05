@@ -4,7 +4,7 @@ import './HomePageAdmin.css';
 import { FaUsers, FaCube, FaClipboardList, FaPowerOff } from 'react-icons/fa';
 import { IoAdd } from 'react-icons/io5';
 import axios from '../../../api/axios';
-const BASEURL = 'http://103.77.209.93:3001'
+const BASEURL = 'http://103.77.209.110:3001'
 
 
 function HomePage() {
