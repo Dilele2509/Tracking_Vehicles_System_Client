@@ -23,6 +23,7 @@ const Alert = ({ children, className = '' }) => (
 const DriverViolations = () => {
   const [selectedViolation, setSelectedViolation] = useState(null);
   const [violations, setViolations] = useState([]);
+  const [newVioStatus, setNewVioStatus] = useState(false)
   const config = {
     headers: {
       "Content-Type": "application/json"
@@ -74,7 +75,7 @@ const DriverViolations = () => {
       .catch((error) => {
         console.error("Error fetching violations:", error);
       });
-  }, []);
+  }, [newVioStatus]);
 
   // Severity badge color mapping
   const getSeverityColor = (severity) => {
@@ -108,7 +109,7 @@ const DriverViolations = () => {
 
         <div className="p-6">
           <div className="grid md:grid-cols-2 gap-6">
-            <div style={{height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+            <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <h2 className="text-2xl font-bold mb-4" style={{ color: '#3B3B3B' }}>
                 Warning
               </h2>
@@ -160,6 +161,32 @@ const DriverViolations = () => {
       </div>
     </div>
   );
+
+  // Kết nối WebSocket
+  useEffect(() => {
+    const ws = new WebSocket(`ws://${baseIP}:3002`);
+
+    ws.onopen = () => {
+      console.log('WebSocket connected');
+    };
+
+    ws.onmessage = (message) => {
+      const data = JSON.parse(message.data);
+      //console.log(data);
+      if (data.event === 'violateNotify') {
+        // Cập nhật mới từ WebSocket
+        setNewVioStatus(data.data)
+      }
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket disconnected');
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#FEF6E9] to-[#fff5e6]"
