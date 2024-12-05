@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import axios from '../../api/axios';
 import MoneyFormat from '../MoneyFormat';
-const BASEURL = 'http://103.77.209.110:3001'
+const BASEURL = 'http://103.77.209.93:3001'
 
 // Revenue Chart Component
 const RevenueChart = () => {

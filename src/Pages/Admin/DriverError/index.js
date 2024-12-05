@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { AlertCircle, Clock, User, ArrowLeft, InfoIcon } from 'lucide-react';
 import axios from '../../../api/axios';
 
-const BASEURL = 'http://103.77.209.110:3001';
-const baseIP = '103.77.209.110';
+const BASEURL = 'http://103.77.209.93:3001';
+const baseIP = '103.77.209.93';
 
 // Card component
 const Card = ({ children, className = '', onClick }) => (
