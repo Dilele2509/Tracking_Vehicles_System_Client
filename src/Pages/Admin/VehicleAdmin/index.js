@@ -9,6 +9,7 @@ import L from "leaflet";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import axios from '../../../api/axios';
+const baseIP = '103.77.209.110'
 
 
 function VehicleAdmin() {
@@ -48,6 +49,47 @@ function VehicleAdmin() {
     },
     withCredentials: true
   }
+
+  // Kết nối WebSocket
+  useEffect(() => {
+    const ws = new WebSocket(`ws://${baseIP}:3002`);
+
+    ws.onopen = () => {
+      console.log('WebSocket connected');
+    };
+
+    ws.onmessage = (message) => {
+      const data = JSON.parse(message.data);
+      if (data.event === 'newData') {
+        //console.log('websocket: ', data.data);
+        // Cập nhật tọa độ mới từ WebSocket
+        if (vehicleList.length > 0) {
+          const updatedVehicles = vehicleList.map((vehicle) => {
+            if (data.data.device_id === vehicle.device_id) {
+              return {
+                ...vehicle,
+                latitude: parseFloat(data.data.latitude),
+                longitude: parseFloat(data.data.longitude),
+                speed: data.data.speed,
+                time: data.data.time,
+                date: data.data.date,
+              };
+            }
+            return vehicle;
+          });
+          setVehicleList(updatedVehicles);
+        }
+      }
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket disconnected');
+    };
+
+    return () => {
+      ws.close();
+    };
+  },[]); 
 
   useEffect(() => {
     const fetchData = async () => {
