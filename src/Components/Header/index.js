@@ -14,7 +14,7 @@ import eventEmitter from '../../../../pages/Users/util/EventEmitter';
 import { Link } from 'react-router-dom';
 
 function Header() {
-  const src = 'http://103.77.209.93:3001/';
+  const src = 'http://localhost:3001/';
   const [userAvatar, setUserAvatar] = useState(null);
   const [cartLength, setCartLength] = useState(0);
   const [searchResult, setSearchResult] = useState([]);

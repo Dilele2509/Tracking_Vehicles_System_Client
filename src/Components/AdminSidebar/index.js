@@ -13,7 +13,7 @@ function AdminSidebar() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [showButton, setShowButton] = useState(true);
     const [notifyViolation, setNotifyViolation] = useState(false)
-    const baseIP = '103.77.209.93';
+    const baseIP = 'localhost';
     const config = {
         headers: {
             "Content-Type": "application/json"
