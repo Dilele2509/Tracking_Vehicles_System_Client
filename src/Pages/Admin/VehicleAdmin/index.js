@@ -96,7 +96,7 @@ function VehicleAdmin() {
       if (data.event === 'newData') {
         // Cập nhật tọa độ mới từ WebSocket
 
-        console.log('vehicle length: ', vehicleList.length);
+        console.log('vehicle length: ', vehicleList);
         if (vehicleList.length > 0) {
           console.log('websocket check: ', data.data);
           const updatedVehicles = vehicleList.map((vehicle) => {
