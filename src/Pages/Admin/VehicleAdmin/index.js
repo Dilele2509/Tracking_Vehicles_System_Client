@@ -50,48 +50,6 @@ function VehicleAdmin() {
     withCredentials: true
   }
 
-  // Kết nối WebSocket
-  useEffect(() => {
-    const ws = new WebSocket(`ws://${baseIP}:3002`);
-
-    ws.onopen = () => {
-      console.log('WebSocket connected');
-    };
-
-    ws.onmessage = (message) => {
-      const data = JSON.parse(message.data);
-      if (data.event === 'newData') {
-        // Cập nhật tọa độ mới từ WebSocket
-        if (vehicleList.length > 0) {
-          const updatedVehicles = vehicleList.map((vehicle) => {
-            console.log('websocket check: ', data.data);
-            if (data.data.device_id === vehicle.device_id) {
-              return {
-                ...vehicle,
-                latitude: parseFloat(data.data.latitude),
-                longitude: parseFloat(data.data.longitude),
-                speed: data.data.speed,
-                time: data.data.time,
-                date: data.data.date,
-              };
-            }
-            return vehicle;
-          });
-          console.log('vehicle update ws',updatedVehicles);
-          setVehicleList(updatedVehicles);
-        }
-      }
-    };
-
-    ws.onclose = () => {
-      console.log('WebSocket disconnected');
-    };
-
-    return () => {
-      ws.close();
-    };
-  },[]); 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -123,6 +81,48 @@ function VehicleAdmin() {
     };
 
     fetchData();
+  }, []);
+
+  // Kết nối WebSocket
+  useEffect(() => {
+    const ws = new WebSocket(`ws://${baseIP}:3002`);
+
+    ws.onopen = () => {
+      console.log('WebSocket connected');
+    };
+
+    ws.onmessage = (message) => {
+      const data = JSON.parse(message.data);
+      if (data.event === 'newData') {
+        // Cập nhật tọa độ mới từ WebSocket
+        if (vehicleList.length > 0) {
+          const updatedVehicles = vehicleList.map((vehicle) => {
+            console.log('websocket check: ', data.data);
+            if (data.data.device_id === vehicle.device_id) {
+              return {
+                ...vehicle,
+                latitude: parseFloat(data.data.latitude),
+                longitude: parseFloat(data.data.longitude),
+                speed: data.data.speed,
+                time: data.data.time,
+                date: data.data.date,
+              };
+            }
+            return vehicle;
+          });
+          console.log('vehicle update ws', updatedVehicles);
+          setVehicleList(updatedVehicles);
+        }
+      }
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket disconnected');
+    };
+
+    return () => {
+      ws.close();
+    };
   }, []);
 
   const handleLocateClick = async (latitude, longitude) => {
