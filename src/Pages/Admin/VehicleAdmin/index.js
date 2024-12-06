@@ -380,6 +380,7 @@ function VehicleAdmin() {
                     </tr>
                   </thead>
                   <tbody>
+                    {console.log(vehicleList.length)}
                     {vehicleList.map((vehicle) => (
                       <tr key={vehicle.id}>
                         <td className='info-long-text'>
