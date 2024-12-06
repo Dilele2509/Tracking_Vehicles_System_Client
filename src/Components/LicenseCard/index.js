@@ -23,6 +23,7 @@ function LicenseCard({ licenseData, onClose }) {
                     </div>
                 </div>
             </div>
+            
         </div>
     );
 }

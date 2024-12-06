@@ -61,10 +61,10 @@ function VehicleAdmin() {
     ws.onmessage = (message) => {
       const data = JSON.parse(message.data);
       if (data.event === 'newData') {
-        console.log('websocket: ', data.data);
         // Cập nhật tọa độ mới từ WebSocket
         if (vehicleList.length > 0) {
           const updatedVehicles = vehicleList.map((vehicle) => {
+            console.log('websocket check: ', data.data);
             if (data.data.device_id === vehicle.device_id) {
               return {
                 ...vehicle,
@@ -77,6 +77,7 @@ function VehicleAdmin() {
             }
             return vehicle;
           });
+          console.log('vehicle update ws',updatedVehicles);
           setVehicleList(updatedVehicles);
         }
       }
