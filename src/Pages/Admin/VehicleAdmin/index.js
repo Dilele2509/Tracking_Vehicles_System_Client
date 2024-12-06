@@ -61,7 +61,7 @@ function VehicleAdmin() {
     ws.onmessage = (message) => {
       const data = JSON.parse(message.data);
       if (data.event === 'newData') {
-        //console.log('websocket: ', data.data);
+        console.log('websocket: ', data.data);
         // Cập nhật tọa độ mới từ WebSocket
         if (vehicleList.length > 0) {
           const updatedVehicles = vehicleList.map((vehicle) => {
